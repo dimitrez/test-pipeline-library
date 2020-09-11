@@ -15,15 +15,24 @@ class Pipeline {
 //    ===================== Your Code Starts Here =====================
 //    Note : use "script" to access objects from jenkins pipeline run (WorkflowScript passed from Jenkinsfile)
 //           for example: script.node(), script.stage() etc
-        Yaml yaml = new Yaml();
-        def obj = yaml.load(configurationFile);
+        //Yaml yaml = new Yaml();
+        //def obj = yaml.load(configurationFile);
         //obj.each {println(it.notifications)}
-        def command = "mvn clean test -Dscope=regression; exit 1"
-        def proc = command.execute()
-        proc.waitFor()
+        //def command = "mvn clean test -Dscope=regression; exit 1"
+        //def proc = command.execute()
+        //proc.waitFor()
+        def cmd = ['/bin/sh', '-c', 'pwd']
+        cmd.execute().with {
+            def output = new StringWriter()
+            def error = new StringWriter()
+            it.waitForProcessOutput(output, error)
+            println("error = $error")
+            println("output = $output")
+            println "code=${it.exitValue()}"
+        }
 
-        def logger = Logger.getLogger("")
-        logger.println(proc.exitValue())
+//        def logger = Logger.getLogger("")
+//        logger.println(proc.exitValue())
 
 //        if (proc.exitValue() != 0)
 //            System.exit(1)
