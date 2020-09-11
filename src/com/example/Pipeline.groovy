@@ -16,8 +16,9 @@ class Pipeline {
 //           for example: script.node(), script.stage() etc
         Yaml yaml = new Yaml();
         //def document = new FileReader("config.yml");
-        def obj = yaml.load(configurationFile);
-        echo "Hello", ${configurationFile};
+        def obj = yaml.load((configurationFile as File).text);
+        obj.each {println(it.notifications)}
+
 
 //    ===================== Parse configuration file ==================
 
