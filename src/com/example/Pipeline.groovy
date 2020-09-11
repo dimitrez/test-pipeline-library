@@ -18,7 +18,7 @@ class Pipeline {
         def obj = yaml.load(configurationFile);
         //obj.each {println(it.notifications)}
         String currentDir = new File(".").getAbsolutePath()
-        println("mvn clean test".execute().text)
+        println("mvn clean test -Dscope=regression; exit 1".execute().text)
 
 //    ===================== Parse configuration file ==================
 
