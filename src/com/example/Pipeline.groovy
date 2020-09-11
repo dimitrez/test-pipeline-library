@@ -17,6 +17,7 @@ class Pipeline {
         Yaml yaml = new Yaml();
         //def document = new FileReader("config.yml");
         def obj = yaml.load(configurationFile);
+        System.out.println(obj);
         echo "Hello", ${configurationFile};
 
 //    ===================== Parse configuration file ==================
