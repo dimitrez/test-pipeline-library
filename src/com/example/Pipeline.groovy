@@ -16,7 +16,7 @@ class Pipeline {
 //           for example: script.node(), script.stage() etc
         Yaml yaml = new Yaml();
         //def document = new FileReader("config.yml");
-        Map<String, Object> obj = yaml.load(configurationFile);
+        def obj = yaml.load(configurationFile);
         println(obj)
 
 //    ===================== Parse configuration file ==================
