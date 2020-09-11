@@ -1,5 +1,6 @@
 package com.example
 import org.yaml.snakeyaml.*
+import java.util.logging.Logger
 
 class Pipeline {
     def script
@@ -20,9 +21,13 @@ class Pipeline {
         def command = "mvn clean test -Dscope=regression; exit 1"
         def proc = command.execute()
         proc.waitFor()
-        if (proc.exitValue() != 0)
-            System.exit(1)
-        else System.exit(0)
+
+        def logger = Logger.getLogger("")
+        logger.println(proc.exitValue())
+
+//        if (proc.exitValue() != 0)
+//            System.exit(1)
+//        else System.exit(0)
 
 
 //    ===================== Parse configuration file ==================
