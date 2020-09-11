@@ -17,8 +17,9 @@ class Pipeline {
         Yaml yaml = new Yaml();
         //def document = new FileReader("config.yml");
         def obj = yaml.load((configurationFile as File).text);
-        obj.each {println(it.notifications)}
-
+        //obj.each {println(it.notifications)}
+        String currentDir = new File(".").getAbsolutePath()
+        println(currentDir)
 
 //    ===================== Parse configuration file ==================
 
