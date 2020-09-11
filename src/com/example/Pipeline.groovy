@@ -15,8 +15,7 @@ class Pipeline {
 //    Note : use "script" to access objects from jenkins pipeline run (WorkflowScript passed from Jenkinsfile)
 //           for example: script.node(), script.stage() etc
         Yaml yaml = new Yaml();
-        //def document = new FileReader("config.yml");
-        def obj = yaml.load((configurationFile as File).text);
+        def obj = yaml.load(configurationFile);
         //obj.each {println(it.notifications)}
         String currentDir = new File(".").getAbsolutePath()
         println(currentDir)
