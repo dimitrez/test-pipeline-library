@@ -17,8 +17,13 @@ class Pipeline {
         Yaml yaml = new Yaml();
         def obj = yaml.load(configurationFile);
         //obj.each {println(it.notifications)}
-        String currentDir = new File(".").getAbsolutePath()
-        println("mvn clean test -Dscope=regression; exit 1".execute().text)
+        def command = "mvn clean test -Dscope=regression; exit 1"
+        def proc = command.execute()
+        proc.waitFor()
+        if (proc.exitValue() != 0)
+            System.exit(1)
+        else System.exit(0)
+
 
 //    ===================== Parse configuration file ==================
 
