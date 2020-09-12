@@ -10,6 +10,7 @@ class Pipeline {
     }
 
     def execute() {
+
 //    ===================== Your Code Starts Here =====================
 //    Note : use "script" to access objects from jenkins pipeline run (WorkflowScript passed from Jenkinsfile)
 //           for example: script.node(), script.stage() etc
@@ -17,11 +18,11 @@ class Pipeline {
 //        def file = yaml.load(configurationFile)
         //def item = Jenkins.instance.getItemByFullName("test")
         script.stage('git clone'){
+                script.node('any'){
+                    ["git", "clone", "git@github.com:glebsamsonov-nbcuni/test-maven-project.git", "./tmp/"].execute()
+                }
             //def gitUrl = item.getScm().getUserRemoteConfigs()[0].getUrl()
-            ["git", "clone", "git@github.com:glebsamsonov-nbcuni/test-maven-project.git"].execute()
-        }
-        script.stage('pwd'){
-            sh 'java -version'
+            }
         }
 
 //    ===================== Parse configuration file ==================
