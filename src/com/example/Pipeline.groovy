@@ -1,5 +1,6 @@
 package com.example
-import groovy.yaml.YamlSlurper
+//import groovy.yaml.YamlSlurper
+import org.yaml.snakeyaml.Yaml
 
 class Pipeline {
     def script
@@ -16,8 +17,9 @@ class Pipeline {
 //           for example: script.node(), script.stage() etc
 
 //    ===================== Parse configuration file ==================
-        def rConf = new FileReader(configurationFile)
-        def config = new YamlSlurper().parseText(rConf)
+        //def rConf = new FileReader(configurationFile)
+        def config = new Yaml().load(configurationFile)
+        //def config = new YamlSlurper().parseText(rConf)
 
         def email = config.notifications.email.recipients
         def emailOnStart = config.notifications.email.on_start
