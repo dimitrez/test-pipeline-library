@@ -19,12 +19,10 @@ class Pipeline {
         //def item = Jenkins.instance.getItemByFullName("test")
         script.stage('git clone'){
                 script.node('any'){
-                    ["git", "clone", "git@github.com:glebsamsonov-nbcuni/test-maven-project.git", "./tmp/"].execute()
+                    ["git", "clone", "git@github.com:glebsamsonov-nbcuni/test-maven-project.git", "./tmp/"].execute().waitFor()
                 }
             //def gitUrl = item.getScm().getUserRemoteConfigs()[0].getUrl()
-            }
         }
-
 //    ===================== Parse configuration file ==================
 
 //    ===================== Run pipeline stages =======================
