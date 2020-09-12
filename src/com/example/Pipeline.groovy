@@ -1,5 +1,6 @@
 package com.example
 
+//import groovy.yaml.YamlSlurper
 import org.yaml.snakeyaml.Yaml
 
 import java.awt.List
@@ -26,15 +27,15 @@ class Pipeline {
         }
 
 //    ===================== Parse configuration file ==================
-        String config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
-        //String config = new Yaml().dump("/var/jenkins_home/workspace/test/config.yml")
+        def config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
+        //def config = new FileReader("/var/jenkins_home/workspace/test/config.yml")
 
 //        def email = config.notifications.email.recipients
 //        def emailOnStart = config.notifications.email.on_start
 //        def emailOnFailure = config.notifications.email.on_failure
 //        def emailOnSuccesss = config.notifications.email.on_success
-//
-        def buildProjectFolder = "config.projectFolder"
+
+        def buildProjectFolder = config['build']['projectFolder']
                 //config.build.projectFolder
 //        def buildCommand = config.build.buildCommand
 //
