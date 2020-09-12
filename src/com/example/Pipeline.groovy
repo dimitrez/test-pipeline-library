@@ -1,6 +1,6 @@
 package com.example
 
-import org.yaml.snakeyaml.Yaml
+//import org.yaml.snakeyaml.Yaml
 
 class Pipeline {
     def script
@@ -15,8 +15,8 @@ class Pipeline {
 //    ===================== Your Code Starts Here =====================
 //    Note : use "script" to access objects from jenkins pipeline run (WorkflowScript passed from Jenkinsfile)
 //           for example: script.node(), script.stage() etc
-        Yaml yaml = new Yaml()
-        def file = yaml.load(configurationFile)
+//        Yaml yaml = new Yaml()
+//        def file = yaml.load(configurationFile)
         //def item = Jenkins.instance.getItemByFullName("test")
         script.stage('git clone'){
             //def gitUrl = item.getScm().getUserRemoteConfigs()[0].getUrl()
