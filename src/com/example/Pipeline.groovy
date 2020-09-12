@@ -65,7 +65,7 @@ class Pipeline {
 
             def status = true
             script.stage('build'){
-                dir("/var/jenkins_home/workspace/test/" + buildProjectFolder)
+                dir("/var/jenkins_home/workspace/test/project/")
                 def buildStatus = sh(script: buildCommand, returnStatus: true, returnStdout: true)
                 if (buildStatus != 0){
                     script.sh("exit 1")
