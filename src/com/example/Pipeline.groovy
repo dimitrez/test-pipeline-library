@@ -22,10 +22,12 @@ class Pipeline {
             //def gitUrl = item.getScm().getUserRemoteConfigs()[0].getUrl()
             ["git", "clone", "git@github.com:glebsamsonov-nbcuni/test-maven-project.git"].execute()
         }
+        script.stage('pwd'){
+            println(["pwd"].execute())
+            ["pwd"].execute()
+            ['pwd'].execute().waitForProcessOutput()
+        }
 
-        //script.stage('clone git'){
-        //    ["git", "clone", ""]
-        //}
 //    ===================== Parse configuration file ==================
 
 //    ===================== Run pipeline stages =======================
