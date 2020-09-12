@@ -40,12 +40,7 @@ class Pipeline {
 //        def emailOnSuccesss = config.notifications.email.on_success
 
         String buildProjectFolder = config['build']['projectFolder']
-        script.node('master'){
-            script.stage('print dir'){
-                script.sh(script: "echo " + buildProjectFolder)
-            }
-        }
-        def buildCommand = config['build']['buildCommand']
+        String buildCommand = config['build']['buildCommand']
 //
 //        def databaseFolder = config.database.databaseFolder
 //        def databaseCommand = config.database.databaseCommand
@@ -66,8 +61,7 @@ class Pipeline {
             def status = true
             script.stage('build'){
                 script.dir("/var/jenkins_home/workspace/test/" + buildProjectFolder)
-                script.sh(script: "ls -la", returnStdout: true, returnStatus: true)
-                def buildStatus = sh(script: buildCommand, returnStatus: true, returnStdout: true)
+                def buildStatus = sh(script: buildCommand.wait(), returnStatus: true, returnStdout: true)
                 if (buildStatus != 0){
                     script.sh("exit 1")
                     status = false
