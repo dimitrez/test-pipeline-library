@@ -87,7 +87,7 @@ class Pipeline {
             }
             script.stage('tests'){
                 if (status){
-                    dir(projectDir + testsFolder.getAt(0)){
+                    dir(projectDir + testsFolder.getAt(1)){
                         script.sh(script: "echo " + testsFolder)
                         script.parallel{
                             script.stage('performanceTest'){
