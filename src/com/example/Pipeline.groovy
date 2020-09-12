@@ -35,7 +35,7 @@ class Pipeline {
         def databaseFolder = config['database']['databaseFolder']
         String databaseCommand = config['database']['databaseCommand'].toString()
 //
-//        def deploy = config['deploy']['deployCommand']
+        String deploy = config['deploy']['deployCommand'].toString()
 //
 //        def testsFolder = config['test']['testFolder']
 //
