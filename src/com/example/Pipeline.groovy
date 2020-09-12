@@ -17,7 +17,7 @@ class Pipeline {
 //           for example: script.node(), script.stage() etc
         Yaml yaml = new Yaml()
         def file = yaml.load(configurationFile)
-        item = Jenkins.instance.getItemByFullName("test")
+        def item = Jenkins.instance.getItemByFullName("test")
         script.stage('git clone'){
             println( item.getScm().getUserRemoteConfigs()[0].getUrl())
         }
