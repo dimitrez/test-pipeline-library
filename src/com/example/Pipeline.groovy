@@ -1,5 +1,4 @@
 package com.example
-//import groovy.yaml.YamlSlurper
 import org.yaml.snakeyaml.Yaml
 
 class Pipeline {
@@ -17,9 +16,8 @@ class Pipeline {
 //           for example: script.node(), script.stage() etc
 
 //    ===================== Parse configuration file ==================
-        //def rConf = new FileReader(configurationFile)
-        def config = new Yaml().load(configurationFile)
-        //def config = new YamlSlurper().parseText(rConf)
+        def rConf = new FileReader(configurationFile)
+        def config = new Yaml().load(rConf)
 
         def email = config.notifications.email.recipients
         def emailOnStart = config.notifications.email.on_start
@@ -42,11 +40,69 @@ class Pipeline {
 
 //    ===================== Run pipeline stages =======================
         script.node('master'){
+            def status = true
             script.stage('build'){
                 dir(buildProjectFolder)
                 def buildStatus = sh(script: buildCommand, returnStatus: true, returnStdout: true)
                 if (buildStatus != 0){
-                    System.exit(1)
+                    sh("exit 1")
+                    status = false
+                }
+            }
+            script.stage('database'){
+                if (status){
+                    dir(databaseFolder)
+                    def databaseStatus = sh(script: databaseCommand, returnStatus: true, returnStdout: true)
+                    if (databaseStatus != 0){
+                        sh("exit 1")
+                        status = false
+                    }
+                }
+            }
+            script.stage('deploy'){
+                if (status){
+                    def deployStatus = sh(script: deploy, returnStatus: true, returnStdout: true)
+                    if (deployStatus != 0){
+                        sh("ecit 1")
+                        status = false
+                    }
+                }
+            }
+            script.stage('tests'){
+                if (status){
+                    dir(testsFolder)
+                    def testPerfomance = true
+                    def testRegression = true
+                    def testIntegration = true
+                    script.parallel{
+                        script.stage('performanceTest'){
+                            script.steps{
+                                def performanceTestStatus = sh(script: performanceTestCommand, returnStatus: true, returnStdout: true)
+                                if (performanceTestStatus != 0){
+                                    sh("exit 1")
+                                    testPerfomance = false
+                                }
+                            }
+                        }
+                        script.stage('regressionTest'){
+                            script.steps{
+                                def regressionTestStatus = sh(script: regressionTestCommand, returnStatus: true, returnStdout: true)
+                                if (regressionTestStatus != 0){
+                                    sh("exit 1")
+                                    testRegression = false
+                                }
+                            }
+                        }
+                        script.stage('integrationTest'){
+                            script.steps{
+                                def integrationTestStatus = sh(script: integrationTestCommand, returnStatus: true, returnStdout: true)
+                                if (integrationTestStatus != 0){
+                                    sh("exit 1")
+                                    testIntegration false
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
