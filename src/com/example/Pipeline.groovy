@@ -52,7 +52,8 @@ class Pipeline {
             def status = true
             script.stage('build'){
               script.dir(projectDir + buildProjectFolder){
-                  def buildStatus = buildCommand.execute().waitFor()
+                  def buildStatus = script.sh(script: buildCommand, returnStatus: true)
+                  //def buildStatus = buildCommand.execute().waitFor()
                   script.sh(script: "echo " + buildStatus)
 //                  if (buildStatus.exitValue() != 0){
 //                      script.sh("exit 1")
