@@ -39,9 +39,9 @@ class Pipeline {
 //
         def testsFolder = config['test']['testFolder']
 //
-        String performanceTestCommand = config['test']['name']['performance']['testCommand'].toString()
-        String regressionTestCommand = config['test']['name']['regression']['testCommand'].toString()
-        String integrationTestCommand = config['test']['name']['integration']['testCommand'].toString()
+//        String performanceTestCommand = config['test']['name']['performance']['testCommand'].toString()
+//        String regressionTestCommand  = config['test']['name']['regression']['testCommand'].toString()
+//        String integrationTestCommand = config['test']['name']['integration']['testCommand'].toString()
 
         def failedStepName = 'null'
         def projectDir = "/var/jenkins_home/workspace/test/"
