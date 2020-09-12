@@ -32,19 +32,19 @@ class Pipeline {
 //        def emailOnFailure = config['notifications']['email']['on_failure']
 //        def emailOnSuccesss = config['notifications']['email']['on_success']
 
-        def buildProjectFolder = config['build']['projectFolder']
-        def buildCommand = config['build']['buildCommand']
-
-        def databaseFolder = config['database']['databaseFolder']
-        def databaseCommand = config['database']['databaseCommand']
-
-        def deploy = config['deploy']['deployCommand']
-
-        def testsFolder = config['test']['testFolder']
-
-        def performanceTestCommand = config['test']['name']['performance']['testCommand']
-        def regressionTestCommand = config['test']['name']['regression']['testCommand']
-        def integrationTestCommand = config['test']['name']['integration']['testCommand']
+//        def buildProjectFolder = config['build']['projectFolder']
+//        def buildCommand = config['build']['buildCommand']
+//
+//        def databaseFolder = config['database']['databaseFolder']
+//        def databaseCommand = config['database']['databaseCommand']
+//
+//        def deploy = config['deploy']['deployCommand']
+//
+//        def testsFolder = config['test']['testFolder']
+//
+//        def performanceTestCommand = config['test']['name']['performance']['testCommand']
+//        def regressionTestCommand = config['test']['name']['regression']['testCommand']
+//        def integrationTestCommand = config['test']['name']['integration']['testCommand']
 
         def failedStepName = 'null'
         def projectDir = getClass().protectionDomain.codeSource.location.path
