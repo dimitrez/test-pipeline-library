@@ -27,7 +27,7 @@ class Pipeline {
         }
 
 //    ===================== Parse configuration file ==================
-        def config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
+        def config = new Yaml().load(new FileReader("/var/jenkins_home/workspace/test/config.yml").text)
         //def config = new FileReader("/var/jenkins_home/workspace/test/config.yml")
         script.node('master'){
             script.stage('print config'){
