@@ -1,4 +1,6 @@
 package com.example
+
+import groovy.yaml.YamlSlurper
 import org.yaml.snakeyaml.Yaml
 
 import java.awt.List
@@ -26,28 +28,32 @@ class Pipeline {
 
 //    ===================== Parse configuration file ==================
         def config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
+        script.node('master'){
+            script.stage('print config'){
+                config.each {println(it.build)}
+            }
+        }
 
-        def email = config{it.recipients}
-        //config.notifications.email.recipients
-        def emailOnStart = config.notifications.email.on_start
-        def emailOnFailure = config.notifications.email.on_failure
-        def emailOnSuccesss = config.notifications.email.on_success
-
-        def buildProjectFolder = config.build.projectFolder
-        def buildCommand = config.build.buildCommand
-
-        def databaseFolder = config.database.databaseFolder
-        def databaseCommand = config.database.databaseCommand
-
-        def deploy = config.deploy.deployCommand
-
-        def testsFolder = config.test.testFolder
-
-        def performanceTestCommand = config.test.name['performance'].testCommand
-        def regressionTestCommand = config.test.name['regression'].testCommand
-        def integrationTestCommand = config.test.name['integration'].testCommand
-
-        def failedStepName = 'null'
+//        def email = config.notifications.email.recipients
+//        def emailOnStart = config.notifications.email.on_start
+//        def emailOnFailure = config.notifications.email.on_failure
+//        def emailOnSuccesss = config.notifications.email.on_success
+//
+//        def buildProjectFolder = config.build.projectFolder
+//        def buildCommand = config.build.buildCommand
+//
+//        def databaseFolder = config.database.databaseFolder
+//        def databaseCommand = config.database.databaseCommand
+//
+//        def deploy = config.deploy.deployCommand
+//
+//        def testsFolder = config.test.testFolder
+//
+//        def performanceTestCommand = config.test.name['performance'].testCommand
+//        def regressionTestCommand = config.test.name['regression'].testCommand
+//        def integrationTestCommand = config.test.name['integration'].testCommand
+//
+//        def failedStepName = 'null'
 
 //    ===================== Run pipeline stages =======================
         script.node('master'){
