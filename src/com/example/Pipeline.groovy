@@ -25,7 +25,7 @@ class Pipeline {
         }
 
 //    ===================== Parse configuration file ==================
-        List config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
+        def config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
 
         def email = config{it.recipients}
         //config.notifications.email.recipients
