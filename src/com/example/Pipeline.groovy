@@ -47,7 +47,7 @@ class Pipeline {
 //        def integrationTestCommand = config['test']['name']['integration']['testCommand']
 
         def failedStepName = 'null'
-        def projectDir = script.env.WORKSPACE
+        def projectDir = System.getProperty("user.dir")
 
         script.node('master'){
             script.stage('current dir'){
