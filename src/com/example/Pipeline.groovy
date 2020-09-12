@@ -26,10 +26,10 @@ class Pipeline {
         }
 
 //    ===================== Parse configuration file ==================
-        def config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
+        List config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
         script.node('master'){
             script.stage('print config'){
-                config.each {println(it.build)}
+                config.each {println(it.getItem(0))}
             }
         }
 
