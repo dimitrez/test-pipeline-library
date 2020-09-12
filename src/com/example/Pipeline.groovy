@@ -43,8 +43,7 @@ class Pipeline {
 //    ===================== Run pipeline stages =======================
         script.node('master'){
             script.stage('git clone'){
-                ["git", "clone", "git@github.com:glebsamsonov-nbcuni/test-maven-project.git", "test-maven-project"].execute().waitFor()
-                ["pwd"].execute().waitFor()
+                script.git "git git@github.com:glebsamsonov-nbcuni/test-maven-project.git"
             }
             def status = true
             script.stage('build'){
