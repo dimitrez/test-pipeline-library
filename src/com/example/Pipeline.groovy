@@ -26,20 +26,16 @@ class Pipeline {
         }
 
 //    ===================== Parse configuration file ==================
-        //String config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
-        String config = new Yaml().dump("/var/jenkins_home/workspace/test/config.yml")
-        script.node('master'){
-            script.stage('print config'){
-                config.each {println(it)}
-            }
-        }
+        String config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
+        //String config = new Yaml().dump("/var/jenkins_home/workspace/test/config.yml")
 
 //        def email = config.notifications.email.recipients
 //        def emailOnStart = config.notifications.email.on_start
 //        def emailOnFailure = config.notifications.email.on_failure
 //        def emailOnSuccesss = config.notifications.email.on_success
 //
-//        def buildProjectFolder = config.build.projectFolder
+        def buildProjectFolder = "config.projectFolder"
+                //config.build.projectFolder
 //        def buildCommand = config.build.buildCommand
 //
 //        def databaseFolder = config.database.databaseFolder
