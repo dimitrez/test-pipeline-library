@@ -1,9 +1,6 @@
 package com.example
 
-//import groovy.yaml.YamlSlurper
 import org.yaml.snakeyaml.Yaml
-
-import java.awt.List
 
 class Pipeline {
     def script
@@ -57,8 +54,9 @@ class Pipeline {
               script.dir(projectDir + buildProjectFolder){
                   def buildStatus = buildCommand.execute()
                   buildStatus.waitFor()
-                  //script.sh(script: buildCommand, returnStatus: true, returnStdout: false)
-                  if (buildStatus.exitValue() != 0){
+                  def eStatus = buildStatus.exitValue()
+
+                  if (eStatus != 0){
                       script.sh("exit 1")
                       status = false
                       failedStepName = 'build'
