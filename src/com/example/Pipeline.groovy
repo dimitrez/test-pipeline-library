@@ -55,11 +55,13 @@ class Pipeline {
             def status = true
             script.stage('build'){
                 script.dir(projectDir + buildProjectFolder)
-                def buildStatus = sh(script: buildCommand, returnStatus: true, returnStdout: true)
-                if (buildStatus != 0){
-                    script.sh("exit 1")
-                    status = false
-                    failedStepName = 'build'
+                script.steps{
+                    def buildStatus = sh(script: "mvn clean test", returnStatus: true, returnStdout: true)
+                    if (buildStatus != 0){
+                        script.sh("exit 1")
+                        status = false
+                        failedStepName = 'build'
+                    }
                 }
             }
             script.stage('database'){
