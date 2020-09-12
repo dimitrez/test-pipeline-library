@@ -105,6 +105,9 @@ class Pipeline {
                     }
                 }
             }
+            script.stage('notifications'){
+
+            }
         }
 //    ===================== End pipeline ==============================
     }
