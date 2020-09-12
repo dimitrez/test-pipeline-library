@@ -17,10 +17,10 @@ class Pipeline {
 //           for example: script.node(), script.stage() etc
         Yaml yaml = new Yaml()
         def file = yaml.load(configurationFile)
-        def item = Jenkins.instance.getItemByFullName("test")
+        //def item = Jenkins.instance.getItemByFullName("test")
         script.stage('git clone'){
-            def gitUrl = item.getScm().getUserRemoteConfigs()[0].getUrl()
-            ["git", "clone", gitUrl].execute()
+            //def gitUrl = item.getScm().getUserRemoteConfigs()[0].getUrl()
+            ["git", "clone", "git@github.com:glebsamsonov-nbcuni/test-maven-project.git"].execute()
         }
 
         //script.stage('clone git'){
