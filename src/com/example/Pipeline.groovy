@@ -1,4 +1,8 @@
 package com.example
+import org.yaml.snakeyaml.Yaml
+import groovy.yaml.YamlSlurper
+
+import java.util.concurrent.Executor
 
 class Pipeline {
     def script
@@ -14,19 +18,39 @@ class Pipeline {
 //    ===================== Your Code Starts Here =====================
 //    Note : use "script" to access objects from jenkins pipeline run (WorkflowScript passed from Jenkinsfile)
 //           for example: script.node(), script.stage() etc
-//        Yaml yaml = new Yaml()
-//        def file = yaml.load(configurationFile)
-        //def item = Jenkins.instance.getItemByFullName("test")
-        script.stage('git clone'){
-                script.node('master'){
-                    ["git", "clone", "git@github.com:glebsamsonov-nbcuni/test-maven-project.git", "./tmp/"].execute().waitFor()
-                }
-            //def gitUrl = item.getScm().getUserRemoteConfigs()[0].getUrl()
-        }
+
 //    ===================== Parse configuration file ==================
+        def config = new YamlSlurper().parseText(configurationFile)
+
+        def email = config.notifications.email.recipients
+        def emailOnStart = config.notifications.email.on_start
+        def emailOnFailure = config.notifications.email.on_failure
+        def emailOnSuccesss = config.notifications.email.on_success
+
+        def buildProjectFolder = config.build.projectFolder
+        def buildCommand = config.build.buildCommand
+
+        def databaseFolder = config.database.databaseFolder
+        def databaseCommand = config.database.databaseCommand
+
+        def deploy = config.deploy.deployCommand
+
+        def testsFolder = config.test.testFolder
+
+        def performanceTestCommand = config.test.name['performance'].testCommand
+        def regressionTestCommand = config.test.name['regression'].testCommand
+        def integrationTestCommand = config.test.name['integration'].testCommand
 
 //    ===================== Run pipeline stages =======================
-
+        script.node('master'){
+            script.stage('build'){
+                dir(buildProjectFolder)
+                def buildStatus = sh(script: buildCommand, returnStatus: true)
+                if (buildStatus != 0){
+                    System.exit(1)
+                }
+            }
+        }
 //    ===================== End pipeline ==============================
     }
 }
