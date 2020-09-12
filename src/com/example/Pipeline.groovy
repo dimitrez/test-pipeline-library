@@ -37,11 +37,11 @@ class Pipeline {
 //
         String deploy = config['deploy']['deployCommand'].toString()
 //
-//        def testsFolder = config['test']['testFolder']
+        def testsFolder = config['test']['testFolder']
 //
-//        def performanceTestCommand = config['test']['name']['performance']['testCommand']
-//        def regressionTestCommand = config['test']['name']['regression']['testCommand']
-//        def integrationTestCommand = config['test']['name']['integration']['testCommand']
+        String performanceTestCommand = config['test']['name']['performance']['testCommand'].toString()
+        String regressionTestCommand = config['test']['name']['regression']['testCommand'].toString()
+        String integrationTestCommand = config['test']['name']['integration']['testCommand'].toString()
 
         def failedStepName = 'null'
         def projectDir = "/var/jenkins_home/workspace/test/"
@@ -87,32 +87,33 @@ class Pipeline {
             }
             script.stage('tests'){
                 if (status){
-                    dir(projectDir + testsFolder)
-                    script.parallel{
-                        script.stage('performanceTest'){
-                            script.steps{
-                                def performanceTestStatus = sh(script: performanceTestCommand, returnStatus: true, returnStdout: true)
-                                if (performanceTestStatus != 0){
-                                    sh("exit 1")
-                                    failedStepName = 'performanceTest'
+                    dir(projectDir + testsFolder){
+                        script.parallel{
+                            script.stage('performanceTest'){
+                                script.steps{
+                                    def performanceTestStatus = sh(script: performanceTestCommand, returnStatus: true)
+                                    if (performanceTestStatus != 0){
+                                        sh("exit 1")
+                                        failedStepName = 'performanceTest'
+                                    }
                                 }
                             }
-                        }
-                        script.stage('regressionTest'){
-                            script.steps{
-                                def regressionTestStatus = sh(script: regressionTestCommand, returnStatus: true, returnStdout: true)
-                                if (regressionTestStatus != 0){
-                                    sh("exit 1")
-                                    failedStepName = 'regressionTest'
+                            script.stage('regressionTest'){
+                                script.steps{
+                                    def regressionTestStatus = sh(script: regressionTestCommand, returnStatus: true)
+                                    if (regressionTestStatus != 0){
+                                        sh("exit 1")
+                                        failedStepName = 'regressionTest'
+                                    }
                                 }
                             }
-                        }
-                        script.stage('integrationTest'){
-                            script.steps{
-                                def integrationTestStatus = sh(script: integrationTestCommand, returnStatus: true, returnStdout: true)
-                                if (integrationTestStatus != 0){
-                                    sh("exit 1")
-                                    failedStepName = 'integrationTest'
+                            script.stage('integrationTest'){
+                                script.steps{
+                                    def integrationTestStatus = sh(script: integrationTestCommand, returnStatus: true)
+                                    if (integrationTestStatus != 0){
+                                        sh("exit 1")
+                                        failedStepName = 'integrationTest'
+                                    }
                                 }
                             }
                         }
