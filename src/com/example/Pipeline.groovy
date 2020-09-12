@@ -87,7 +87,7 @@ class Pipeline {
             }
             script.stage('tests'){
                 if (status){
-                    script.dir(projectDir + testsFolder){
+                    script.dir(projectDir + 'test'){
                         script.parallel{
                             script.stage('performanceTest'){
                                 script.steps{
