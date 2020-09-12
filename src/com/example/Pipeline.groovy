@@ -14,10 +14,11 @@ class Pipeline {
 //    ===================== Your Code Starts Here =====================
 //    Note : use "script" to access objects from jenkins pipeline run (WorkflowScript passed from Jenkinsfile)
 //           for example: script.node(), script.stage() etc
-
-        script.stage('git clone'){
-            script.git "git@github.com:glebsamsonov-nbcuni/test-maven-project.git"
-            script.sh(script: "pwd")
+        script.node('master'){
+            script.stage('git clone'){
+                script.git "git@github.com:glebsamsonov-nbcuni/test-maven-project.git"
+                script.sh(script: "pwd")
+            }
         }
 
 //    ===================== Parse configuration file ==================
