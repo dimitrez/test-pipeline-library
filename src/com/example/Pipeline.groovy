@@ -18,6 +18,7 @@ class Pipeline {
             script.stage('git clone'){
                 script.git "git@github.com:glebsamsonov-nbcuni/test-maven-project.git"
                 script.sh(script: "pwd")
+                script.sh(script: "ls -la")
             }
         }
 
