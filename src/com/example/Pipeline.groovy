@@ -52,14 +52,13 @@ class Pipeline {
             def status = true
             script.stage('build'){
               script.dir(projectDir + buildProjectFolder){
-                  def buildStatus = buildCommand.execute()
-                  script.sh(script: "echo " + buildStatus.waitFor())
+                  def buildStatus = buildCommand.execute().waitFor()
 
-                  if (buildStatus.exitValue() != 0){
-                      script.sh("exit 1")
-                      status = false
-                      failedStepName = 'build'
-                  }
+//                  if (buildStatus.exitValue() != 0){
+//                      script.sh("exit 1")
+//                      status = false
+//                      failedStepName = 'build'
+//                  }
               }
             }
             script.stage('database'){
