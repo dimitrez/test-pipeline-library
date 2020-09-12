@@ -47,13 +47,7 @@ class Pipeline {
 //        def integrationTestCommand = config['test']['name']['integration']['testCommand']
 
         def failedStepName = 'null'
-        def projectDir = System.getProperty("user.dir")
-
-        script.node('master'){
-            script.stage('current dir'){
-                script.sh(script: "echo " + projectDir)
-            }
-        }
+        def projectDir = "/var/jenkins_home/workspace/test/"
 
 //    ===================== Run pipeline stages =======================
         script.node('master'){
