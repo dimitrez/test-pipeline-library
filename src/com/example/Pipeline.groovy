@@ -1,8 +1,5 @@
 package com.example
-import org.yaml.snakeyaml.Yaml
 import groovy.yaml.YamlSlurper
-
-import java.util.concurrent.Executor
 
 class Pipeline {
     def script
