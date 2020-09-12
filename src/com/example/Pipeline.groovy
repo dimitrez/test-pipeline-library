@@ -54,7 +54,7 @@ class Pipeline {
 
             def status = true
             script.stage('build'){
-//                script.dir(projectDir + buildProjectFolder)
+                script.ws(projectDir + buildProjectFolder)
                 //script.dir("/var/jenkins_home/workspace/test/project/")
                 script.sh (script: "echo " + buildCommand)
 //                script.steps{
