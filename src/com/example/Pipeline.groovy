@@ -26,7 +26,8 @@ class Pipeline {
         }
 
 //    ===================== Parse configuration file ==================
-        String config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
+        //String config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
+        String config = new Yaml().dump("/var/jenkins_home/workspace/test/config.yml")
         script.node('master'){
             script.stage('print config'){
                 config.each {println(it)}
