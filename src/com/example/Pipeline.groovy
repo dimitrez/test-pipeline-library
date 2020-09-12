@@ -40,6 +40,7 @@ class Pipeline {
 //        def emailOnSuccesss = config.notifications.email.on_success
 
         def buildProjectFolder = config['build']['projectFolder']
+        script.sh(script: "echo " + buildProjectFolder)
 //        def buildCommand = config.build.buildCommand
 //
 //        def databaseFolder = config.database.databaseFolder
