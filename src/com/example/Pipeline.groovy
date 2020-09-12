@@ -75,12 +75,13 @@ class Pipeline {
             }
             script.stage('deploy'){
                 if (status){
-                    script.dir(projectDir + buildProjectFolder)
-                    def deployStatus = sh(script: deploy, returnStatus: true, returnStdout: true)
-                    if (deployStatus != 0){
-                        sh("exit 1")
-                        status = false
-                        failedStepName = 'deploy'
+                    script.dir(projectDir + buildProjectFolder){
+                        def deployStatus = script.sh(script: deploy, returnStatus: true)
+                        if (deployStatus != 0){
+                            sh("exit 1")
+                            status = false
+                            failedStepName = 'deploy'
+                        }
                     }
                 }
             }
