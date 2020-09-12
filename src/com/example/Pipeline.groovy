@@ -66,7 +66,7 @@ class Pipeline {
                     script.dir(projectDir + databaseFolder){
                         def databaseStatus = script.sh(script: databaseCommand, returnStatus: true)
                         if (databaseStatus != 0){
-                            sh("exit 1")
+                            script.sh("exit 1")
                             status = false
                             failedStepName = 'database'
                         }
@@ -78,7 +78,7 @@ class Pipeline {
                     script.dir(projectDir + buildProjectFolder){
                         def deployStatus = script.sh(script: deploy, returnStatus: true)
                         if (deployStatus != 0){
-                            sh("exit 1")
+                            script.sh("exit 1")
                             status = false
                             failedStepName = 'deploy'
                         }
@@ -87,32 +87,31 @@ class Pipeline {
             }
             script.stage('tests'){
                 if (status){
-                    dir(projectDir + 'test'){
-                        script.sh(script: "echo " + testsFolder)
+                    script.dir(projectDir + testsFolder){
                         script.parallel{
                             script.stage('performanceTest'){
                                 script.steps{
-                                    def performanceTestStatus = sh(script: performanceTestCommand, returnStatus: true)
+                                    def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
                                     if (performanceTestStatus != 0){
-                                        sh("exit 1")
+                                        script.sh("exit 1")
                                         failedStepName = 'performanceTest'
                                     }
                                 }
                             }
                             script.stage('regressionTest'){
                                 script.steps{
-                                    def regressionTestStatus = sh(script: regressionTestCommand, returnStatus: true)
+                                    def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
                                     if (regressionTestStatus != 0){
-                                        sh("exit 1")
+                                        script.sh("exit 1")
                                         failedStepName = 'regressionTest'
                                     }
                                 }
                             }
                             script.stage('integrationTest'){
                                 script.steps{
-                                    def integrationTestStatus = sh(script: integrationTestCommand, returnStatus: true)
+                                    def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
                                     if (integrationTestStatus != 0){
-                                        sh("exit 1")
+                                        script.sh("exit 1")
                                         failedStepName = 'integrationTest'
                                     }
                                 }
