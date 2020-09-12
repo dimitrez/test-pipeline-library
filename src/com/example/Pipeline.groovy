@@ -37,7 +37,7 @@ class Pipeline {
 //
         String deploy = config['deploy']['deployCommand'].toString()
 //
-        String testsFolder = config['test']['testFolder'].toString()
+        def testsFolder = config['test']['testFolder'] as String
 //
 //        String performanceTestCommand = config['test']['name']['performance']['testCommand'].toString()
 //        String regressionTestCommand  = config['test']['name']['regression']['testCommand'].toString()
@@ -87,7 +87,7 @@ class Pipeline {
             }
             script.stage('tests'){
                 if (status){
-                    dir(projectDir + testsFolder){
+                    dir(projectDir + testsFolder.getAt(0)){
                         script.sh(script: "echo " + testsFolder)
                         script.parallel{
                             script.stage('performanceTest'){
