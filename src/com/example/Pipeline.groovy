@@ -1,6 +1,5 @@
 package com.example
 
-import groovy.yaml.YamlSlurper
 import org.yaml.snakeyaml.Yaml
 
 import java.awt.List
