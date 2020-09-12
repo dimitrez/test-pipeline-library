@@ -45,7 +45,7 @@ class Pipeline {
                 script.sh(script: "echo " + buildProjectFolder)
             }
         }
-//        def buildCommand = config.build.buildCommand
+        def buildCommand = config['build']['buildCommand']
 //
 //        def databaseFolder = config.database.databaseFolder
 //        def databaseCommand = config.database.databaseCommand
@@ -58,14 +58,14 @@ class Pipeline {
 //        def regressionTestCommand = config.test.name['regression'].testCommand
 //        def integrationTestCommand = config.test.name['integration'].testCommand
 //
-//        def failedStepName = 'null'
+        def failedStepName = 'null'
 
 //    ===================== Run pipeline stages =======================
         script.node('master'){
 
             def status = true
             script.stage('build'){
-                dir("/var/jenkins_home/workspace/test/project/")
+                script.dir("/var/jenkins_home/workspace/test/" + buildProjectFolder)
                 def buildStatus = sh(script: buildCommand, returnStatus: true, returnStdout: true)
                 if (buildStatus != 0){
                     script.sh("exit 1")
