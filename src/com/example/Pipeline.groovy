@@ -29,7 +29,7 @@ class Pipeline {
         String config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
         script.node('master'){
             script.stage('print config'){
-                println(config)
+                config.each {'build'}
             }
         }
 
