@@ -38,6 +38,8 @@ class Pipeline {
         def regressionTestCommand = config.test.name['regression'].testCommand
         def integrationTestCommand = config.test.name['integration'].testCommand
 
+        def failedStepName = 'null'
+
 //    ===================== Run pipeline stages =======================
         script.node('master'){
             def status = true
@@ -47,6 +49,7 @@ class Pipeline {
                 if (buildStatus != 0){
                     sh("exit 1")
                     status = false
+                    failedStepName = 'build'
                 }
             }
             script.stage('database'){
@@ -56,6 +59,7 @@ class Pipeline {
                     if (databaseStatus != 0){
                         sh("exit 1")
                         status = false
+                        failedStepName = 'database'
                     }
                 }
             }
@@ -63,24 +67,22 @@ class Pipeline {
                 if (status){
                     def deployStatus = sh(script: deploy, returnStatus: true, returnStdout: true)
                     if (deployStatus != 0){
-                        sh("ecit 1")
+                        sh("exit 1")
                         status = false
+                        failedStepName = 'deploy'
                     }
                 }
             }
             script.stage('tests'){
                 if (status){
                     dir(testsFolder)
-                    def testPerfomance = true
-                    def testRegression = true
-                    def testIntegration = true
                     script.parallel{
                         script.stage('performanceTest'){
                             script.steps{
                                 def performanceTestStatus = sh(script: performanceTestCommand, returnStatus: true, returnStdout: true)
                                 if (performanceTestStatus != 0){
                                     sh("exit 1")
-                                    testPerfomance = false
+                                    failedStepName = 'performanceTest'
                                 }
                             }
                         }
@@ -89,7 +91,7 @@ class Pipeline {
                                 def regressionTestStatus = sh(script: regressionTestCommand, returnStatus: true, returnStdout: true)
                                 if (regressionTestStatus != 0){
                                     sh("exit 1")
-                                    testRegression = false
+                                    failedStepName = 'regressionTest'
                                 }
                             }
                         }
@@ -98,7 +100,7 @@ class Pipeline {
                                 def integrationTestStatus = sh(script: integrationTestCommand, returnStatus: true, returnStdout: true)
                                 if (integrationTestStatus != 0){
                                     sh("exit 1")
-                                    testIntegration false
+                                    failedStepName = 'integrationTest'
                                 }
                             }
                         }
@@ -106,7 +108,9 @@ class Pipeline {
                 }
             }
             script.stage('notifications'){
-
+                script.emailext body: failedStepName,
+                                subject: 'Failed of Pipeline'
+                                to: email
             }
         }
 //    ===================== End pipeline ==============================
