@@ -1,6 +1,8 @@
 package com.example
 import org.yaml.snakeyaml.Yaml
 
+import java.awt.List
+
 class Pipeline {
     def script
     def configurationFile
@@ -23,9 +25,10 @@ class Pipeline {
         }
 
 //    ===================== Parse configuration file ==================
-        Map config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
+        List config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
 
-        def email = config.notifications.email.recipients
+        def email = config{it.recipients}
+        //config.notifications.email.recipients
         def emailOnStart = config.notifications.email.on_start
         def emailOnFailure = config.notifications.email.on_failure
         def emailOnSuccesss = config.notifications.email.on_success
