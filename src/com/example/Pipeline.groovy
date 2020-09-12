@@ -44,7 +44,7 @@ class Pipeline {
         script.node('master'){
             script.stage('git clone'){
                 script.git "git@github.com:glebsamsonov-nbcuni/test-maven-project.git"
-                sh(script: "pwd")
+                script.sh(script: "pwd")
             }
             def status = true
             script.stage('build'){
