@@ -33,7 +33,7 @@ class Pipeline {
 //        def emailOnSuccesss = config['notifications']['email']['on_success']
 
         def buildProjectFolder = config['build']['projectFolder']
-        def buildCommand = config['build']['buildCommand'].toString()
+        String buildCommand = config['build']['buildCommand'].toString()
 //
 //        def databaseFolder = config['database']['databaseFolder']
 //        def databaseCommand = config['database']['databaseCommand']
@@ -55,8 +55,10 @@ class Pipeline {
             def status = true
             script.stage('build'){
               script.dir(projectDir + buildProjectFolder){
-                  def buildStatus = sh(script: buildCommand, returnStatus: true, returnStdout: true)
-                  if (buildStatus != 0){
+                  def buildStatus = buildCommand.execute()
+                  buildStatus.waitFor()
+                          //sh(script: buildCommand, returnStatus: true, returnStdout: true)
+                  if (buildStatus.exitValue() != 0){
                       script.sh("exit 1")
                       status = false
                       failedStepName = 'build'
