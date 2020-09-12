@@ -54,13 +54,14 @@ class Pipeline {
 
             def status = true
             script.stage('build'){
-              //  script.dir(projectDir + buildProjectFolder)
-                def buildStatus = sh(script: buildCommand, returnStatus: true, returnStdout: true, dir('/var/jenkins_home/workspace/test/project'))
-                if (buildStatus != 0){
-                    script.sh("exit 1")
-                    status = false
-                    failedStepName = 'build'
-                }
+              script.dir(projectDir + buildProjectFolder){
+                  def buildStatus = sh(script: buildCommand, returnStatus: true, returnStdout: true)
+                  if (buildStatus != 0){
+                      script.sh("exit 1")
+                      status = false
+                      failedStepName = 'build'
+                  }
+              }
             }
             script.stage('database'){
                 if (status){
