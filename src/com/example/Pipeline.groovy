@@ -21,47 +21,42 @@ class Pipeline {
         script.node('master'){
             script.stage('git clone'){
                 script.git "git@github.com:glebsamsonov-nbcuni/test-maven-project.git"
-                script.sh(script: "pwd")
-                script.sh(script: "ls -la")
+//                script.sh(script: "pwd")
+//                script.sh(script: "ls -la")
             }
         }
 
 //    ===================== Parse configuration file ==================
         def config = new Yaml().load(new FileReader("/var/jenkins_home/workspace/test/config.yml").text)
-        //def config = new FileReader("/var/jenkins_home/workspace/test/config.yml")
-//        script.node('master'){
-//            script.stage('print config'){
-//                script.sh(script: "echo " + config)
-//            }
-//        }
-//        def email = config.notifications.email.recipients
-//        def emailOnStart = config.notifications.email.on_start
-//        def emailOnFailure = config.notifications.email.on_failure
-//        def emailOnSuccesss = config.notifications.email.on_success
+        def email = config['notifications']['email']['recipients']
+        def emailOnStart = config['notifications']['email']['on_start']
+        def emailOnFailure = config['notifications']['email']['on_failure']
+        def emailOnSuccesss = config['notifications']['email']['on_success']
 
-        String buildProjectFolder = config['build']['projectFolder']
-        String buildCommand = config['build']['buildCommand']
-//
-//        def databaseFolder = config.database.databaseFolder
-//        def databaseCommand = config.database.databaseCommand
-//
-//        def deploy = config.deploy.deployCommand
-//
-//        def testsFolder = config.test.testFolder
-//
-//        def performanceTestCommand = config.test.name['performance'].testCommand
-//        def regressionTestCommand = config.test.name['regression'].testCommand
-//        def integrationTestCommand = config.test.name['integration'].testCommand
-//
+        def buildProjectFolder = config['build']['projectFolder']
+        def buildCommand = config['build']['buildCommand']
+
+        def databaseFolder = config['database']['databaseFolder']
+        def databaseCommand = config['database']['databaseCommand']
+
+        def deploy = config['deploy']['deployCommand']
+
+        def testsFolder = config['test']['testFolder']
+
+        def performanceTestCommand = config['test']['name']['performance']['testCommand']
+        def regressionTestCommand = config['test']['name']['regression']['testCommand']
+        def integrationTestCommand = config['test']['name']['integration']['testCommand']
+
         def failedStepName = 'null'
+        def projectDir = new File(".").getAbsolutePath()
 
 //    ===================== Run pipeline stages =======================
         script.node('master'){
 
             def status = true
             script.stage('build'){
-                script.dir("/var/jenkins_home/workspace/test/" + buildProjectFolder)
-                def buildStatus = sh(script: buildCommand.wait(), returnStatus: true, returnStdout: true)
+                script.dir(projectDir + buildProjectFolder)
+                def buildStatus = sh(script: buildCommand, returnStatus: true, returnStdout: true)
                 if (buildStatus != 0){
                     script.sh("exit 1")
                     status = false
@@ -70,7 +65,7 @@ class Pipeline {
             }
             script.stage('database'){
                 if (status){
-                    dir(databaseFolder)
+                    script.dir(projectDir + databaseFolder)
                     def databaseStatus = sh(script: databaseCommand, returnStatus: true, returnStdout: true)
                     if (databaseStatus != 0){
                         sh("exit 1")
@@ -81,6 +76,7 @@ class Pipeline {
             }
             script.stage('deploy'){
                 if (status){
+                    script.dir(projectDir + buildProjectFolder)
                     def deployStatus = sh(script: deploy, returnStatus: true, returnStdout: true)
                     if (deployStatus != 0){
                         sh("exit 1")
@@ -91,7 +87,7 @@ class Pipeline {
             }
             script.stage('tests'){
                 if (status){
-                    dir(testsFolder)
+                    dir(projectDir + testsFolder)
                     script.parallel{
                         script.stage('performanceTest'){
                             script.steps{
