@@ -1,7 +1,5 @@
 package com.example
 
-//import org.yaml.snakeyaml.Yaml
-
 class Pipeline {
     def script
     def configurationFile
@@ -23,9 +21,7 @@ class Pipeline {
             ["git", "clone", "git@github.com:glebsamsonov-nbcuni/test-maven-project.git"].execute()
         }
         script.stage('pwd'){
-            println(["pwd"].execute())
-            ["pwd"].execute()
-            ['pwd'].execute().waitForProcessOutput()
+            sh 'java -version'
         }
 
 //    ===================== Parse configuration file ==================
