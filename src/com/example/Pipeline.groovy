@@ -1,5 +1,5 @@
 package com.example
-import groovy.yaml.*
+import groovy.yaml.YamlSlurper
 
 class Pipeline {
     def script
