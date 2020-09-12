@@ -23,10 +23,9 @@ class Pipeline {
         }
 
 //    ===================== Parse configuration file ==================
-        def rConf = new FileReader("/var/jenkins_home/workspace/test/config.yml")
-        def config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
+        Map config = new Yaml().load("/var/jenkins_home/workspace/test/config.yml")
 
-        def email = config.notifications.email.recipients
+        String email = config.notifications.email.recipients
         def emailOnStart = config.notifications.email.on_start
         def emailOnFailure = config.notifications.email.on_failure
         def emailOnSuccesss = config.notifications.email.on_success
