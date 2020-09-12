@@ -33,7 +33,7 @@ class Pipeline {
 //        def emailOnSuccesss = config['notifications']['email']['on_success']
 
         def buildProjectFolder = config['build']['projectFolder']
-        def buildCommand = config['build']['buildCommand']
+        def buildCommand = config['build']['buildCommand'].toString()
 //
 //        def databaseFolder = config['database']['databaseFolder']
 //        def databaseCommand = config['database']['databaseCommand']
