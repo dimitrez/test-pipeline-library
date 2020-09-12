@@ -31,7 +31,7 @@ class Pipeline {
         //def config = new FileReader("/var/jenkins_home/workspace/test/config.yml")
         script.node('master'){
             script.stage('print config'){
-                println(config)
+                script.sh(script: "echo " + config)
             }
         }
 //        def email = config.notifications.email.recipients
