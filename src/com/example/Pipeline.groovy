@@ -39,7 +39,7 @@ class Pipeline {
 //        def emailOnFailure = config.notifications.email.on_failure
 //        def emailOnSuccesss = config.notifications.email.on_success
 
-        def buildProjectFolder = config['build']['projectFolder']
+        String buildProjectFolder = config['build']['projectFolder']
         script.node('master'){
             script.stage('print dir'){
                 script.sh(script: "echo " + buildProjectFolder)
