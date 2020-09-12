@@ -26,10 +26,11 @@ class Pipeline {
 
 //    ===================== Parse configuration file ==================
         def config = new Yaml().load(new FileReader("/var/jenkins_home/workspace/test/config.yml").text)
+
         def email = config['notifications']['email']['recipients']
-        def emailOnStart = config['notifications']['email']['on_start']
-        def emailOnFailure = config['notifications']['email']['on_failure']
-        def emailOnSuccesss = config['notifications']['email']['on_success']
+//        def emailOnStart = config['notifications']['email']['on_start']
+//        def emailOnFailure = config['notifications']['email']['on_failure']
+//        def emailOnSuccesss = config['notifications']['email']['on_success']
 
         def buildProjectFolder = config['build']['projectFolder']
         def buildCommand = config['build']['buildCommand']
@@ -46,7 +47,8 @@ class Pipeline {
         def integrationTestCommand = config['test']['name']['integration']['testCommand']
 
         def failedStepName = 'null'
-        def projectDir = new File(".").getAbsolutePath()
+        def projectDir = getClass().protectionDomain.codeSource.location.path
+
         script.node('master'){
             script.stage('current dir'){
                 script.sh(script: "echo " + projectDir)
