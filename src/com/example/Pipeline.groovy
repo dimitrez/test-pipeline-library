@@ -21,8 +21,6 @@ class Pipeline {
         script.node('master'){
             script.stage('git clone'){
                 script.git "git@github.com:glebsamsonov-nbcuni/test-maven-project.git"
-//                script.sh(script: "pwd")
-//                script.sh(script: "ls -la")
             }
         }
 
@@ -49,6 +47,11 @@ class Pipeline {
 
         def failedStepName = 'null'
         def projectDir = new File(".").getAbsolutePath()
+        script.node('master'){
+            script.stage('current dir'){
+                script.sh(script: "echo " + projectDir)
+            }
+        }
 
 //    ===================== Run pipeline stages =======================
         script.node('master'){
