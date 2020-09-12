@@ -1,5 +1,5 @@
 package com.example
-import groovy.yaml.YamlSlurper
+import groovy.yaml.*
 
 class Pipeline {
     def script
@@ -11,7 +11,6 @@ class Pipeline {
     }
 
     def execute() {
-
 //    ===================== Your Code Starts Here =====================
 //    Note : use "script" to access objects from jenkins pipeline run (WorkflowScript passed from Jenkinsfile)
 //           for example: script.node(), script.stage() etc
@@ -42,7 +41,7 @@ class Pipeline {
         script.node('master'){
             script.stage('build'){
                 dir(buildProjectFolder)
-                def buildStatus = sh(script: buildCommand, returnStatus: true)
+                def buildStatus = sh(script: buildCommand, returnStatus: true, returnStdout: true)
                 if (buildStatus != 0){
                     System.exit(1)
                 }
