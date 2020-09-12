@@ -16,7 +16,8 @@ class Pipeline {
 //           for example: script.node(), script.stage() etc
 
 //    ===================== Parse configuration file ==================
-        def config = new YamlSlurper().parseText(configurationFile)
+        def rConf = new FileReader(configurationFile)
+        def config = new YamlSlurper().parseText(rConf)
 
         def email = config.notifications.email.recipients
         def emailOnStart = config.notifications.email.on_start
