@@ -38,11 +38,11 @@ class Pipeline {
         String deploy = config['deploy']['deployCommand'].toString()
 
         def testData = config['test']
-        String testsFolder = testData['name']['performance']['testFolder'].toString()
+        def testsFolder = testData['testFolder'].getAt()
 
         script.node('master'){
             script.stage('check test data'){
-                script.sh(script: "echo " + testsFolder)
+                script.sh(script: "echo " + testsFolder(0))
             }
         }
 
