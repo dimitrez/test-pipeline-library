@@ -130,7 +130,9 @@ class Pipeline {
                 }
             }
         }
-        script.cleanWs
+        script.node('master'){
+            script.cleanWs
+        }
 //    ===================== End pipeline ==============================
     }
 }
