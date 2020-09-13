@@ -91,7 +91,7 @@ class Pipeline {
                 script.stage('tests') {
                     if (status) {
                         script.dir(projectDir + testsFolder) {
-                            //script.parallel {
+                            script.parallel runPerformanceTest: {
                                 script.stage('performanceTest') {
                                     def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
                                     if (performanceTestStatus != 0) {
@@ -100,7 +100,7 @@ class Pipeline {
                                         failedStepName = 'performanceTest'
                                     }
                                 }
-
+                            }, runEegressionTest: {
                                 script.stage('regressionTest') {
                                     def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
                                     if (regressionTestStatus != 0) {
@@ -109,6 +109,7 @@ class Pipeline {
                                         failedStepName = 'regressionTest'
                                     }
                                 }
+                            }, runIntegrationTest: {
                                 script.stage('integrationTest') {
                                     def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
                                     if (integrationTestStatus != 0) {
@@ -117,7 +118,7 @@ class Pipeline {
                                         failedStepName = 'integrationTest'
                                     }
                                 }
-                            //}
+                            }
                         }
                     }
                 }
