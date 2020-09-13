@@ -43,14 +43,15 @@ class Pipeline {
         def regressionTestCommand = testData.getAt(1)['testCommand'].toString()
         def integrationTestCommand = testData.getAt(2)['testCommand'].toString()
 
-        def failedStepName = 'null'
+        Boolean status = true
+        String failedStepName = 'null'
+
         def projectDir = "/var/jenkins_home/workspace/test/"
 
 //    ===================== Run pipeline stages =======================
         try {
             script.node('master') {
 
-                def status = true
                 script.stage('build') {
                     script.dir(projectDir + buildProjectFolder) {
                         def buildStatus = script.sh(script: buildCommand, returnStatus: true)
@@ -106,7 +107,7 @@ class Pipeline {
                                     if (regressionTestStatus != 0) {
                                         script.currentBuild.result = 'ABORTED'
                                         script.error('stop')
-                                        return failedStepName = 'regressionTest'
+                                        failedStepName = 'regressionTest'
                                     }
                                 }
                             }, runIntegrationTest: {
@@ -127,7 +128,8 @@ class Pipeline {
         catch (e){
             script.node('master') {
                 script.stage('notifications') {
-                    script.sh(script: "echo " + failedStepName)
+                    script.sh(script: "echo " + failedStepName.toString())
+                    script.sh(script: "echo " + status.toString())
                     script.emailext body: failedStepName,
                             subject: 'Failed of Pipeline',
                             to: email
