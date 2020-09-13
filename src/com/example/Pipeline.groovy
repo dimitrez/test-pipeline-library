@@ -98,6 +98,9 @@ class Pipeline {
                                 if (regressionTestStatus != 0) {
                                     script.currentBuild.result = 'ABORTED'
                                     script.error('stop')
+                                    script.environment{
+                                        def envFailedStepName = 'regressionTest'
+                                    }
                                     script.env.failedStepName = 'regressionTest'
                                 }
                             }
@@ -118,7 +121,7 @@ class Pipeline {
         catch (e){
             script.node('master') {
                 script.stage('notifications') {
-                    script.sh(script: "echo " + script.env.failedStepName)
+                    script.sh(script: "echo " + script.env.envFailedStepName)
                     script.emailext body: failedStepName,
                             subject: 'Failed of Pipeline',
                             to: email
