@@ -15,7 +15,6 @@ class Pipeline {
 //    ===================== Your Code Starts Here =====================
 //    Note : use "script" to access objects from jenkins pipeline run (WorkflowScript passed from Jenkinsfile)
 //           for example: script.node(), script.stage() etc
-        def ws
         script.node('master'){
             script.stage('git clone'){
                 script.git "git@github.com:glebsamsonov-nbcuni/test-maven-project.git"
@@ -23,7 +22,8 @@ class Pipeline {
         }
 
 //    ===================== Parse configuration file ==================
-        def config = new Yaml().load(new FileReader("/var/jenkins_home/workspace/test/config.yml").text)
+        //def config = new Yaml().load(new FileReader("/var/jenkins_home/workspace/test/config.yml").text)
+        def config = new Yaml().load(new FileReader(".//" + configurationFile).text)
 
         def email = config['notifications']['email']['recipients']
 //        def emailOnStart = config['notifications']['email']['on_start']
