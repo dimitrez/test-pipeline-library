@@ -64,6 +64,7 @@ class Pipeline {
                     }
                 }
                 script.stage('database') {
+                    status = false
                     if (status) {
                         script.dir(projectDir + databaseFolder) {
                             def databaseStatus = script.sh(script: databaseCommand, returnStatus: true)
