@@ -55,7 +55,7 @@ class Pipeline {
                   def buildStatus = script.sh(script: buildCommand, returnStatus: true)
                   //script.sh(script: "echo " + buildStatus)
                   if (buildStatus != 0){
-                      script.sh("exit 1")
+                      //script.sh("exit 1")
                       status = false
                       failedStepName = 'build'
                   }
@@ -66,7 +66,7 @@ class Pipeline {
                     script.dir(projectDir + databaseFolder){
                         def databaseStatus = script.sh(script: databaseCommand, returnStatus: true)
                         if (databaseStatus != 0){
-                            script.sh("exit 1")
+                            //script.sh("exit 1")
                             status = false
                             failedStepName = 'database'
                         }
@@ -78,7 +78,7 @@ class Pipeline {
                     script.dir(projectDir + buildProjectFolder){
                         def deployStatus = script.sh(script: deploy, returnStatus: true)
                         if (deployStatus != 0){
-                            script.sh("exit 1")
+                            //script.sh("exit 1")
                             status = false
                             failedStepName = 'deploy'
                         }
@@ -97,21 +97,12 @@ class Pipeline {
 //                                        failedStepName = 'performanceTest'
 //                                    }
 //                                }
-                                script.post{
-                                    script.failure {
-                                        script.stage('notifications'){
-                                            script.email-ext body: failedStepName,
-                                                    subject: 'Failed of Pipeline',
-                                                    to: email
-                                        }
-                                    }
-                                }
                             }
                             script.stage('regressionTest') {
                                 script.steps {
                                     def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
                                     if (regressionTestStatus != 0) {
-                                        script.sh("exit 1")
+                                        //script.sh("exit 1")
                                         failedStepName = 'regressionTest'
                                     }
                                 }
@@ -120,12 +111,21 @@ class Pipeline {
                                 script.steps {
                                     def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
                                     if (integrationTestStatus != 0) {
-                                        script.sh("exit 1")
+                                        //script.sh("exit 1")
                                         failedStepName = 'integrationTest'
                                     }
                                 }
                             }
 //                        }
+                    }
+                }
+            }
+            script.post{
+                script.failure {
+                    script.stage('notifications'){
+                        script.emailext body: failedStepName,
+                                subject: 'Failed of Pipeline',
+                                to: email
                     }
                 }
             }
