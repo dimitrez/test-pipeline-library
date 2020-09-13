@@ -102,6 +102,8 @@ class Pipeline {
 //                                script.steps {
                                     def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
                                     if (regressionTestStatus != 0) {
+                                        script.currentBuild.result = 'ABORTED'
+                                        script.error('stop')
                                         //script.sh("exit 1")
                                         failedStepName = 'regressionTest'
                                     }
