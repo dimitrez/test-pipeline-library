@@ -34,14 +34,17 @@ class Pipeline {
 
         def databaseFolder = config['database']['databaseFolder']
         String databaseCommand = config['database']['databaseCommand'].toString()
-//
+
         String deploy = config['deploy']['deployCommand'].toString()
-//
+
         def testsFolder = config['test']['testFolder']
-//
-        String performanceTestCommand = config['test']['testFolder']['test']['name']['performance']['testCommand'].toString()
-//        String regressionTestCommand  = config['test']['name']['regression']['testCommand'].toString()
-//        String integrationTestCommand = config['test']['name']['integration']['testCommand'].toString()
+        def testData = config['test']
+
+        script.node('master'){
+            script.stage('check test data'){
+                script.sh(script: "echo " + testData)
+            }
+        }
 
         def failedStepName = 'null'
         def projectDir = "/var/jenkins_home/workspace/test/"
@@ -88,35 +91,35 @@ class Pipeline {
             script.stage('tests'){
                 if (status){
                     script.dir(projectDir + 'test'){
-                        script.parallel{
-                            script.stage('performanceTest'){
-                                script.steps{
-                                    def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
-                                    if (performanceTestStatus != 0){
-                                        script.sh("exit 1")
-                                        failedStepName = 'performanceTest'
-                                    }
-                                }
-                            }
-                            script.stage('regressionTest'){
-                                script.steps{
-                                    def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
-                                    if (regressionTestStatus != 0){
-                                        script.sh("exit 1")
-                                        failedStepName = 'regressionTest'
-                                    }
-                                }
-                            }
-                            script.stage('integrationTest'){
-                                script.steps{
-                                    def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
-                                    if (integrationTestStatus != 0){
-                                        script.sh("exit 1")
-                                        failedStepName = 'integrationTest'
-                                    }
-                                }
-                            }
-                        }
+//                        script.parallel{
+//                            script.stage('performanceTest'){
+//                                script.steps{
+//                                    def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
+//                                    if (performanceTestStatus != 0){
+//                                        script.sh("exit 1")
+//                                        failedStepName = 'performanceTest'
+//                                    }
+//                                }
+//                            }
+//                            script.stage('regressionTest'){
+//                                script.steps{
+//                                    def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
+//                                    if (regressionTestStatus != 0){
+//                                        script.sh("exit 1")
+//                                        failedStepName = 'regressionTest'
+//                                    }
+//                                }
+//                            }
+//                            script.stage('integrationTest'){
+//                                script.steps{
+//                                    def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
+//                                    if (integrationTestStatus != 0){
+//                                        script.sh("exit 1")
+//                                        failedStepName = 'integrationTest'
+//                                    }
+//                                }
+//                            }
+//                        }
                     }
                 }
             }
