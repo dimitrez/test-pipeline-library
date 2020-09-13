@@ -91,7 +91,7 @@ class Pipeline {
                 script.stage('tests') {
                     if (status) {
                         script.dir(projectDir + testsFolder) {
-//                        script.parallel {
+                        script.parallel {
                             script.stage('performanceTest') {
 //                                script.steps {
                                 def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
@@ -122,15 +122,8 @@ class Pipeline {
                                 }
 //                                }
                             }
-//                        }
                         }
-                    }
-                }
-                if (!status || !failedStepName) {
-                    script.stage('notifications') {
-                        script.emailext body: failedStepName,
-                                subject: 'Failed of Pipeline',
-                                to: email
+                        }
                     }
                 }
             }
