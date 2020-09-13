@@ -97,13 +97,13 @@ class Pipeline {
 //                                        failedStepName = 'performanceTest'
 //                                    }
 //                                }
-                            }
-                            script.post{
-                                script.failure {
-                                    script.stage('notifications'){
-                                        script.emailext body: failedStepName,
-                                                        subject: 'Failed of Pipeline',
-                                                        to: email
+                                script.post{
+                                    script.failure {
+                                        script.stage('notifications'){
+                                            script.email-ext body: failedStepName,
+                                                    subject: 'Failed of Pipeline',
+                                                    to: email
+                                        }
                                     }
                                 }
                             }
