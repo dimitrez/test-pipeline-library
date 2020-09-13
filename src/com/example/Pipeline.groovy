@@ -85,41 +85,41 @@ class Pipeline {
                     }
                 }
             }
-            script.stage('tests'){
-                if (status){
-                    script.dir(projectDir + testsFolder){
-//                        script.parallel{
-                            script.stage('performanceTest'){
-//                                script.steps{
+            script.stages('tests') {
+                if (status) {
+                    script.dir(projectDir + testsFolder) {
+                        script.parallel {
+                            script.stage('performanceTest') {
+                                script.steps {
                                     def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
-                                    if (performanceTestStatus != 0){
+                                    if (performanceTestStatus != 0) {
                                         script.sh("exit 1")
                                         failedStepName = 'performanceTest'
                                     }
                                 }
                             }
-                            script.stage('regressionTest'){
-//                                script.steps{
+                            script.stage('regressionTest') {
+                                script.steps {
                                     def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
-                                    if (regressionTestStatus != 0){
+                                    if (regressionTestStatus != 0) {
                                         script.sh("exit 1")
                                         failedStepName = 'regressionTest'
                                     }
-//                                }
+                                }
                             }
-//                            script.stage('integrationTest'){
-//                                script.steps{
-//                                    def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
-//                                    if (integrationTestStatus != 0){
-//                                        script.sh("exit 1")
-//                                        failedStepName = 'integrationTest'
-//                                    }
-//                                }
-//                            }
-//                        }
+                            script.stage('integrationTest') {
+                                script.steps {
+                                    def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
+                                    if (integrationTestStatus != 0) {
+                                        script.sh("exit 1")
+                                        failedStepName = 'integrationTest'
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
-
+            }
             script.stage('notifications'){
                 script.emailext body: failedStepName,
                                 subject: 'Failed of Pipeline'
