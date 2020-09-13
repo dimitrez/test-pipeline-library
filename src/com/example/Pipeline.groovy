@@ -130,13 +130,13 @@ class Pipeline {
                 }
             }
         }
-        script.node('master'){
-            script.stage('cleanup WorkSpace'){
-                script.dir(workspace){
-                    script.deleteDir()
-                }
-            }
-        }
+//        script.node('master'){
+//            script.stage('cleanup WorkSpace'){
+//                script.dir(workspace){
+//                    script.deleteDir()
+//                }
+//            }
+//        }
 //    ===================== End pipeline ==============================
     }
 }
