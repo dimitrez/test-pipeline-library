@@ -97,7 +97,7 @@ class Pipeline {
                                     if (performanceTestStatus != 0) {
                                         script.currentBuild.result = 'ABORTED'
                                         script.error('stop')
-                                        failedStepName = 'performanceTest'
+                                        return failedStepName = 'performanceTest'
                                     }
                                 }
                             }, runRegressionTest: {
@@ -106,7 +106,7 @@ class Pipeline {
                                     if (regressionTestStatus != 0) {
                                         script.currentBuild.result = 'ABORTED'
                                         script.error('stop')
-                                        failedStepName = 'regressionTest'
+                                        return failedStepName = 'regressionTest'
                                     }
                                 }
                             }, runIntegrationTest: {
@@ -115,7 +115,7 @@ class Pipeline {
                                     if (integrationTestStatus != 0) {
                                         script.currentBuild.result = 'ABORTED'
                                         script.error('stop')
-                                        failedStepName = 'integrationTest'
+                                        return failedStepName = 'integrationTest'
                                     }
                                 }
                             }
