@@ -131,7 +131,9 @@ class Pipeline {
             }
         }
         script.node('master'){
-            script.cleanWs
+            script.stage('cleanup WorkSpace'){
+                script.cleanWs
+            }
         }
 //    ===================== End pipeline ==============================
     }
