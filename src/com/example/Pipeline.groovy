@@ -23,6 +23,8 @@ class Pipeline {
         }
 
 //    ===================== Parse configuration file ==================
+        def wsDir = script.env.WORKSPACE
+
         def config = new Yaml().load(new FileReader("/var/jenkins_home/workspace/test/config.yml").text)
 
         def email = config['notifications']['email']['recipients']
@@ -119,6 +121,7 @@ class Pipeline {
         catch (e){
             script.node('master') {
                 script.stage('notifications') {
+                    script.sh(script: "echo " + wsDir)
                     script.emailext body: failedStepName,
                             subject: 'Failed of Pipeline',
                             to: email
