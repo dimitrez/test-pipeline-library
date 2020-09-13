@@ -51,7 +51,7 @@ class Pipeline {
         def failedStepName
 
         //def projectDir = "/var/jenkins_home/workspace/test/"
-        def projectDir = workspace
+        def projectDir = workspace + "/"
 
 //    ===================== Run pipeline stages =======================
         try {
