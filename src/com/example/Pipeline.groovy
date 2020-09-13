@@ -39,7 +39,7 @@ class Pipeline {
 //
         def testsFolder = config['test']['testFolder']
 //
-//        String performanceTestCommand = config['test']['name']['performance']['testCommand'].toString()
+        String performanceTestCommand = config['test']['testFolder']['test']['name']['performance']['testCommand'].toString()
 //        String regressionTestCommand  = config['test']['name']['regression']['testCommand'].toString()
 //        String integrationTestCommand = config['test']['name']['integration']['testCommand'].toString()
 
