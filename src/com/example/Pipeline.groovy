@@ -57,7 +57,7 @@ class Pipeline {
                         if (buildStatus != 0) {
                             script.currentBuild.result = 'FAILURE'
                             script.error('stop')
-                            failedStepName = 'build'
+                            failedStepName = script.env.STAGE_NAME
                         }
                     }
                 }
@@ -67,7 +67,7 @@ class Pipeline {
                         if (databaseStatus != 0) {
                             script.currentBuild.result = 'FAILURE'
                             script.error('stop')
-                            failedStepName = 'database'
+                            failedStepName = script.env.STAGE_NAME
                         }
                     }
                 }
@@ -77,7 +77,7 @@ class Pipeline {
                         if (deployStatus != 0) {
                             script.currentBuild.result = 'FAILURE'
                             script.error('stop')
-                            failedStepName = 'deploy'
+                            failedStepName = script.env.STAGE_NAME
                         }
                     }
                 }
@@ -89,16 +89,16 @@ class Pipeline {
                                 if (performanceTestStatus != 0) {
                                     script.currentBuild.result = 'FAILURE'
                                     script.error('stop')
-                                    script.env.failedStepName = 'performanceTest'
+                                    failedStepName = script.env.STAGE_NAME
                                 }
                             }
                         }, runRegressionTest: {
                             script.stage('regressionTest') {
                                 def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
                                 if (regressionTestStatus != 0) {
+                                    failedStepName = script.env.STAGE_NAME
                                     script.currentBuild.result = 'FAILURE'
                                     script.error('stop')
-                                    failedStepName = script.env.STAGE_NAME
                                 }
                             }
                         }, runIntegrationTest: {
@@ -107,7 +107,7 @@ class Pipeline {
                                 if (integrationTestStatus != 0) {
                                     script.currentBuild.result = 'FAILURE'
                                     script.error('stop')
-                                    script.env.failedStepName = 'integrationTest'
+                                    failedStepName = script.env.STAGE_NAME
                                 }
                             }
                         }
