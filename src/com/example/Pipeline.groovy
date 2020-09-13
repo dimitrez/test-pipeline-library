@@ -100,8 +100,9 @@ class Pipeline {
                                         failedStepName = 'performanceTest'
                                     }
                                 }
-                            }, runEegressionTest: {
+                            }, runRegressionTest: {
                                 script.stage('regressionTest') {
+                                    regressionTestCommand = "mvn clean test -Dscope=regression"
                                     def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
                                     if (regressionTestStatus != 0) {
                                         script.currentBuild.result = 'ABORTED'
