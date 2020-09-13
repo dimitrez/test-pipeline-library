@@ -132,7 +132,9 @@ class Pipeline {
         }
         script.node('master'){
             script.stage('cleanup WorkSpace'){
-                script.cleanWs
+                script.dir(workspace){
+                    script.deleteDir()
+                }
             }
         }
 //    ===================== End pipeline ==============================
