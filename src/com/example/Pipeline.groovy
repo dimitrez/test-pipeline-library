@@ -119,7 +119,7 @@ class Pipeline {
         catch (e){
             script.node('master') {
                 script.stage('notifications') {
-                    script.sh(script: "echo  " script.env.STAGE_NAME)
+                    script.sh(script: "echo  " + script.env.STAGE_NAME)
                     script.emailext body: failedStepName,
                             subject: 'Failed of Pipeline',
                             to: email
