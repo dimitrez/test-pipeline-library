@@ -95,8 +95,8 @@ class Pipeline {
                                     if (performanceTestStatus != 0){
                                         script.sh("exit 1")
                                         failedStepName = 'performanceTest'
-//                                    }
-//                                }
+                                    }
+                                }
                             }
 //                            script.stage('regressionTest'){
 //                                script.steps{
