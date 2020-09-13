@@ -91,38 +91,33 @@ class Pipeline {
                 script.stage('tests') {
                     if (status) {
                         script.dir(projectDir + testsFolder) {
-                        script.parallel {
-                            script.stage('performanceTest') {
-//                                script.steps {
-                                def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
-                                if (performanceTestStatus != 0) {
-                                    script.currentBuild.result = 'ABORTED'
-                                    script.error('stop')
-                                    failedStepName = 'performanceTest'
+                            //script.parallel {
+                                script.stage('performanceTest') {
+                                    def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
+                                    if (performanceTestStatus != 0) {
+                                        script.currentBuild.result = 'ABORTED'
+                                        script.error('stop')
+                                        failedStepName = 'performanceTest'
+                                    }
                                 }
-//                                }
-                            }
-                            script.stage('regressionTest') {
-//                                script.steps {
-                                def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
-                                if (regressionTestStatus != 0) {
-                                    script.currentBuild.result = 'ABORTED'
-                                    script.error('stop')
-                                    failedStepName = 'regressionTest'
+
+                                script.stage('regressionTest') {
+                                    def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
+                                    if (regressionTestStatus != 0) {
+                                        script.currentBuild.result = 'ABORTED'
+                                        script.error('stop')
+                                        failedStepName = 'regressionTest'
+                                    }
                                 }
-//                                }
-                            }
-                            script.stage('integrationTest') {
-//                                script.steps {
-                                def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
-                                if (integrationTestStatus != 0) {
-                                    script.currentBuild.result = 'ABORTED'
-                                    script.error('stop')
-                                    failedStepName = 'integrationTest'
+                                script.stage('integrationTest') {
+                                    def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
+                                    if (integrationTestStatus != 0) {
+                                        script.currentBuild.result = 'ABORTED'
+                                        script.error('stop')
+                                        failedStepName = 'integrationTest'
+                                    }
                                 }
-//                                }
-                            }
-                        }
+                            //}
                         }
                     }
                 }
