@@ -79,7 +79,6 @@ class Pipeline {
                     if (status) {
                         script.dir(projectDir + buildProjectFolder) {
                             def deployStatus = script.sh(script: deploy, returnStatus: true)
-                            deployStatus = 1
                             if (deployStatus != 0) {
                                 script.currentBuild.result = 'ABORTED'
                                 script.error('stop')
@@ -127,6 +126,7 @@ class Pipeline {
         }
         catch (e){
             script.stage('notifications') {
+                script.sh(script: "echo " + failedStepName)
                 script.emailext body: failedStepName,
                         subject: 'Failed of Pipeline',
                         to: email
