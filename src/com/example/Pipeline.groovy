@@ -55,7 +55,7 @@ class Pipeline {
                     script.dir(projectDir + buildProjectFolder) {
                         def buildStatus = script.sh(script: buildCommand, returnStatus: true)
                         if (buildStatus != 0) {
-                            script.currentBuild.result = 'ABORTED'
+                            script.currentBuild.result = 'FAILURE'
                             script.error('stop')
                             failedStepName = 'build'
                         }
@@ -65,7 +65,7 @@ class Pipeline {
                     script.dir(projectDir + databaseFolder) {
                         def databaseStatus = script.sh(script: databaseCommand, returnStatus: true)
                         if (databaseStatus != 0) {
-                            script.currentBuild.result = 'ABORTED'
+                            script.currentBuild.result = 'FAILURE'
                             script.error('stop')
                             failedStepName = 'database'
                         }
@@ -75,7 +75,7 @@ class Pipeline {
                     script.dir(projectDir + buildProjectFolder) {
                         def deployStatus = script.sh(script: deploy, returnStatus: true)
                         if (deployStatus != 0) {
-                            script.currentBuild.result = 'ABORTED'
+                            script.currentBuild.result = 'FAILURE'
                             script.error('stop')
                             failedStepName = 'deploy'
                         }
@@ -87,7 +87,7 @@ class Pipeline {
                             script.stage('performanceTest') {
                                 def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
                                 if (performanceTestStatus != 0) {
-                                    script.currentBuild.result = 'ABORTED'
+                                    script.currentBuild.result = 'FAILURE'
                                     script.error('stop')
                                     script.env.failedStepName = 'performanceTest'
                                 }
@@ -96,19 +96,16 @@ class Pipeline {
                             script.stage('regressionTest') {
                                 def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
                                 if (regressionTestStatus != 0) {
-                                    script.currentBuild.result = 'ABORTED'
+                                    script.currentBuild.result = 'FAILURE'
                                     script.error('stop')
-                                    script.environment{
-                                        def envFailedStepName = 'regressionTest'
-                                    }
-                                    script.env.failedStepName = 'regressionTest'
+                                    failedStepName = 'regressionTest'
                                 }
                             }
                         }, runIntegrationTest: {
                             script.stage('integrationTest') {
                                 def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
                                 if (integrationTestStatus != 0) {
-                                    script.currentBuild.result = 'ABORTED'
+                                    script.currentBuild.result = 'FAILURE'
                                     script.error('stop')
                                     script.env.failedStepName = 'integrationTest'
                                 }
@@ -121,7 +118,7 @@ class Pipeline {
         catch (e){
             script.node('master') {
                 script.stage('notifications') {
-                    script.sh(script: "echo " + script.env.envFailedStepName)
+                    script.sh(script: "echo " + failedStepName)
                     script.emailext body: failedStepName,
                             subject: 'Failed of Pipeline',
                             to: email
