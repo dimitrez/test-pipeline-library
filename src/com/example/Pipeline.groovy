@@ -79,6 +79,7 @@ class Pipeline {
                     if (status) {
                         script.dir(projectDir + buildProjectFolder) {
                             def deployStatus = script.sh(script: deploy, returnStatus: true)
+                            deployStatus = 1
                             if (deployStatus != 0) {
                                 script.currentBuild.result = 'ABORTED'
                                 script.error('stop')
@@ -102,7 +103,6 @@ class Pipeline {
                                 }
                             }, runRegressionTest: {
                                 script.stage('regressionTest') {
-                                    regressionTestCommand = "mvn clean test -Dscope=regression"
                                     def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
                                     if (regressionTestStatus != 0) {
                                         script.currentBuild.result = 'ABORTED'
