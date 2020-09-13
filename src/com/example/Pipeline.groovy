@@ -119,7 +119,7 @@ class Pipeline {
 //                        }
                     }
                 }
-            }
+
             script.stage('notifications'){
                 script.emailext body: failedStepName,
                                 subject: 'Failed of Pipeline'
