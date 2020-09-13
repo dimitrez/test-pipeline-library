@@ -98,15 +98,15 @@ class Pipeline {
                                     }
                                 }
                             }
-//                            script.stage('regressionTest'){
+                            script.stage('regressionTest'){
 //                                script.steps{
-//                                    def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
-//                                    if (regressionTestStatus != 0){
-//                                        script.sh("exit 1")
-//                                        failedStepName = 'regressionTest'
-//                                    }
+                                    def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
+                                    if (regressionTestStatus != 0){
+                                        script.sh("exit 1")
+                                        failedStepName = 'regressionTest'
+                                    }
 //                                }
-//                            }
+                            }
 //                            script.stage('integrationTest'){
 //                                script.steps{
 //                                    def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
