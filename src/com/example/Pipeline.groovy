@@ -47,87 +47,99 @@ class Pipeline {
         def projectDir = "/var/jenkins_home/workspace/test/"
 
 //    ===================== Run pipeline stages =======================
-        script.node('master'){
+        try {
+            script.node('master') {
 
-            def status = true
-            script.stage('build'){
-              script.dir(projectDir + buildProjectFolder){
-                  def buildStatus = script.sh(script: buildCommand, returnStatus: true)
-                  //script.sh(script: "echo " + buildStatus)
-                  if (buildStatus != 0){
-                      //script.sh("exit 1")
-                      status = false
-                      failedStepName = 'build'
-                  }
-              }
-            }
-            script.stage('database'){
-                if (status){
-                    script.dir(projectDir + databaseFolder){
-                        def databaseStatus = script.sh(script: databaseCommand, returnStatus: true)
-                        if (databaseStatus != 0){
-                            //script.sh("exit 1")
+                def status = true
+                script.stage('build') {
+                    script.dir(projectDir + buildProjectFolder) {
+                        def buildStatus = script.sh(script: buildCommand, returnStatus: true)
+                        if (buildStatus != 0) {
+                            script.currentBuild.result = 'ABORTED'
+                            script.error('stop')
                             status = false
-                            failedStepName = 'database'
+                            failedStepName = 'build'
                         }
                     }
                 }
-            }
-            script.stage('deploy'){
-                if (status){
-                    script.dir(projectDir + buildProjectFolder){
-                        def deployStatus = script.sh(script: deploy, returnStatus: true)
-                        if (deployStatus != 0){
-                            //script.sh("exit 1")
-                            status = false
-                            failedStepName = 'deploy'
+                script.stage('database') {
+                    if (status) {
+                        script.dir(projectDir + databaseFolder) {
+                            def databaseStatus = script.sh(script: databaseCommand, returnStatus: true)
+                            if (databaseStatus != 0) {
+                                script.currentBuild.result = 'ABORTED'
+                                script.error('stop')
+                                status = false
+                                failedStepName = 'database'
+                            }
                         }
                     }
                 }
-            }
-            script.stage('tests') {
-                if (status) {
-                    script.dir(projectDir + testsFolder) {
+                script.stage('deploy') {
+                    if (status) {
+                        script.dir(projectDir + buildProjectFolder) {
+                            def deployStatus = script.sh(script: deploy, returnStatus: true)
+                            if (deployStatus != 0) {
+                                script.currentBuild.result = 'ABORTED'
+                                script.error('stop')
+                                status = false
+                                failedStepName = 'deploy'
+                            }
+                        }
+                    }
+                }
+                script.stage('tests') {
+                    if (status) {
+                        script.dir(projectDir + testsFolder) {
 //                        script.parallel {
                             script.stage('performanceTest') {
 //                                script.steps {
-                                    def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
-                                    if (performanceTestStatus != 0) {
-//                                        script.sh("exit 1")
-                                        failedStepName = 'performanceTest'
-                                    }
+                                def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
+                                if (performanceTestStatus != 0) {
+                                    script.currentBuild.result = 'ABORTED'
+                                    script.error('stop')
+                                    failedStepName = 'performanceTest'
+                                }
 //                                }
                             }
                             script.stage('regressionTest') {
 //                                script.steps {
-                                    def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
-                                    if (regressionTestStatus != 0) {
-                                        script.currentBuild.result = 'ABORTED'
-                                        script.error('stop')
-                                        //script.sh("exit 1")
-                                        failedStepName = 'regressionTest'
-                                    }
+                                def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
+                                if (regressionTestStatus != 0) {
+                                    script.currentBuild.result = 'ABORTED'
+                                    script.error('stop')
+                                    failedStepName = 'regressionTest'
+                                }
 //                                }
                             }
                             script.stage('integrationTest') {
 //                                script.steps {
-                                    def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
-                                    if (integrationTestStatus != 0) {
-                                        //script.sh("exit 1")
-                                        failedStepName = 'integrationTest'
-                                    }
+                                def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
+                                if (integrationTestStatus != 0) {
+                                    script.currentBuild.result = 'ABORTED'
+                                    script.error('stop')
+                                    failedStepName = 'integrationTest'
+                                }
 //                                }
                             }
 //                        }
+                        }
+                    }
+                }
+                if (!status || !failedStepName) {
+                    script.stage('notifications') {
+                        script.emailext body: failedStepName,
+                                subject: 'Failed of Pipeline',
+                                to: email
                     }
                 }
             }
-            if (! status || ! failedStepName){
-                script.stage('notifications'){
-                    script.emailext body: failedStepName,
-                            subject: 'Failed of Pipeline',
-                            to: email
-                }
+        }
+        catch (e){
+            script.stage('notifications') {
+                script.emailext body: failedStepName,
+                        subject: 'Failed of Pipeline',
+                        to: email
             }
         }
 //    ===================== End pipeline ==============================
