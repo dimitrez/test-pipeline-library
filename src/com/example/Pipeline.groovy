@@ -39,7 +39,7 @@ class Pipeline {
 
         def testData = config['test']
         def testsFolder = testData['testFolder'].getAt(0)
-        def performanceTestCommand = testData.getAt(0).toString()
+        def performanceTestCommand = testData.getAt(0)['testCommand'].toString()
 
         script.node('master'){
             script.stage('check test data'){
