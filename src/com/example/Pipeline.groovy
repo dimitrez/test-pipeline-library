@@ -90,13 +90,13 @@ class Pipeline {
                     script.dir(projectDir + testsFolder) {
 //                        script.parallel {
                             script.stage('performanceTest') {
-                                script.steps {
+//                                script.steps {
                                     def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
 //                                    if (performanceTestStatus != 0) {
 //                                        script.sh("exit 1")
 //                                        failedStepName = 'performanceTest'
 //                                    }
-                                }
+//                                }
                             }
                             script.post{
                                 script.failure {
