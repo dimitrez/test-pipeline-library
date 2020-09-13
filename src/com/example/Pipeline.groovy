@@ -55,9 +55,9 @@ class Pipeline {
                     script.dir(projectDir + buildProjectFolder) {
                         def buildStatus = script.sh(script: buildCommand, returnStatus: true)
                         if (buildStatus != 0) {
+                            failedStepName = script.env.STAGE_NAME
                             script.currentBuild.result = 'FAILURE'
                             script.error('stop')
-                            failedStepName = script.env.STAGE_NAME
                         }
                     }
                 }
@@ -65,9 +65,9 @@ class Pipeline {
                     script.dir(projectDir + databaseFolder) {
                         def databaseStatus = script.sh(script: databaseCommand, returnStatus: true)
                         if (databaseStatus != 0) {
+                            failedStepName = script.env.STAGE_NAME
                             script.currentBuild.result = 'FAILURE'
                             script.error('stop')
-                            failedStepName = script.env.STAGE_NAME
                         }
                     }
                 }
@@ -75,9 +75,9 @@ class Pipeline {
                     script.dir(projectDir + buildProjectFolder) {
                         def deployStatus = script.sh(script: deploy, returnStatus: true)
                         if (deployStatus != 0) {
+                            failedStepName = script.env.STAGE_NAME
                             script.currentBuild.result = 'FAILURE'
                             script.error('stop')
-                            failedStepName = script.env.STAGE_NAME
                         }
                     }
                 }
@@ -87,9 +87,9 @@ class Pipeline {
                             script.stage('performanceTest') {
                                 def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
                                 if (performanceTestStatus != 0) {
+                                    failedStepName = script.env.STAGE_NAME
                                     script.currentBuild.result = 'FAILURE'
                                     script.error('stop')
-                                    failedStepName = script.env.STAGE_NAME
                                 }
                             }
                         }, runRegressionTest: {
@@ -105,9 +105,9 @@ class Pipeline {
                             script.stage('integrationTest') {
                                 def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
                                 if (integrationTestStatus != 0) {
+                                    failedStepName = script.env.STAGE_NAME
                                     script.currentBuild.result = 'FAILURE'
                                     script.error('stop')
-                                    failedStepName = script.env.STAGE_NAME
                                 }
                             }
                         }
