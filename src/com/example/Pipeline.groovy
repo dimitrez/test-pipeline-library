@@ -120,19 +120,12 @@ class Pipeline {
                     }
                 }
             }
-            script.post{
-                script.failure {
-                    script.stage('notifications'){
-                        script.emailext body: failedStepName,
-                                subject: 'Failed of Pipeline',
-                                to: email
-                    }
+            if (! status || ! failedStepName){
+                script.stage('notifications'){
+                    script.emailext body: failedStepName,
+                            subject: 'Failed of Pipeline',
+                            to: email
                 }
-            }
-            script.stage('notifications'){
-                script.emailext body: failedStepName,
-                                subject: 'Failed of Pipeline'
-                                to: email
             }
         }
 //    ===================== End pipeline ==============================
