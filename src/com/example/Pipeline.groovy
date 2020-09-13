@@ -40,12 +40,8 @@ class Pipeline {
         def testData = config['test']
         def testsFolder = testData['testFolder'].getAt(0)
         def performanceTestCommand = testData.getAt(0)['testCommand'].toString()
-
-        script.node('master'){
-            script.stage('check test data'){
-                script.sh(script: "echo " + performanceTestCommand)
-            }
-        }
+        def regressionTestCommand = testData.getAt(1)['testCommand'].toString()
+        def integrationTestCommand = testData.getAt(2)['testCommand'].toString()
 
         def failedStepName = 'null'
         def projectDir = "/var/jenkins_home/workspace/test/"
@@ -91,17 +87,17 @@ class Pipeline {
             }
             script.stage('tests'){
                 if (status){
-                    script.dir(projectDir + 'test'){
+                    script.dir(projectDir + testsFolder){
 //                        script.parallel{
-//                            script.stage('performanceTest'){
+                            script.stage('performanceTest'){
 //                                script.steps{
-//                                    def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
-//                                    if (performanceTestStatus != 0){
-//                                        script.sh("exit 1")
-//                                        failedStepName = 'performanceTest'
+                                    def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
+                                    if (performanceTestStatus != 0){
+                                        script.sh("exit 1")
+                                        failedStepName = 'performanceTest'
 //                                    }
 //                                }
-//                            }
+                            }
 //                            script.stage('regressionTest'){
 //                                script.steps{
 //                                    def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
