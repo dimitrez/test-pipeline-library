@@ -60,7 +60,6 @@ class Pipeline {
                 script.stage('build') {
                     script.dir(projectDir + buildProjectFolder) {
                         def buildStatus = script.sh(script: buildCommand, returnStatus: true)
-                        buildStatus = 1
                         if (buildStatus != 0) {
                             failedStepName = script.env.STAGE_NAME
                             script.currentBuild.result = 'FAILURE'
@@ -131,6 +130,7 @@ class Pipeline {
                 }
             }
         }
+        script.cleanWs
 //    ===================== End pipeline ==============================
     }
 }
