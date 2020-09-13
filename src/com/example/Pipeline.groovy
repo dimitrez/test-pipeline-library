@@ -92,29 +92,29 @@ class Pipeline {
                             script.stage('performanceTest') {
 //                                script.steps {
                                     def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
-//                                    if (performanceTestStatus != 0) {
+                                    if (performanceTestStatus != 0) {
 //                                        script.sh("exit 1")
-//                                        failedStepName = 'performanceTest'
+                                        failedStepName = 'performanceTest'
 //                                    }
 //                                }
                             }
                             script.stage('regressionTest') {
-                                script.steps {
+//                                script.steps {
                                     def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
                                     if (regressionTestStatus != 0) {
                                         //script.sh("exit 1")
                                         failedStepName = 'regressionTest'
                                     }
-                                }
+//                                }
                             }
                             script.stage('integrationTest') {
-                                script.steps {
+//                                script.steps {
                                     def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
                                     if (integrationTestStatus != 0) {
                                         //script.sh("exit 1")
                                         failedStepName = 'integrationTest'
                                     }
-                                }
+//                                }
                             }
 //                        }
                     }
