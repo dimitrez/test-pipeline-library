@@ -85,7 +85,7 @@ class Pipeline {
                     }
                 }
             }
-            script.stages('tests') {
+            script.stage('tests') {
                 if (status) {
                     script.dir(projectDir + testsFolder) {
                         script.parallel {
