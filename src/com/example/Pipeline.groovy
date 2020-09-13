@@ -92,9 +92,18 @@ class Pipeline {
                             script.stage('performanceTest') {
                                 script.steps {
                                     def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
-                                    if (performanceTestStatus != 0) {
-                                        script.sh("exit 1")
-                                        failedStepName = 'performanceTest'
+//                                    if (performanceTestStatus != 0) {
+//                                        script.sh("exit 1")
+//                                        failedStepName = 'performanceTest'
+//                                    }
+                                }
+                            }
+                            script.post{
+                                script.failure {
+                                    script.stage('notifications'){
+                                        script.emailext body: failedStepName,
+                                                        subject: 'Failed of Pipeline',
+                                                        to: email
                                     }
                                 }
                             }
