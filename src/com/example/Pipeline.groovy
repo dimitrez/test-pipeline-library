@@ -88,7 +88,7 @@ class Pipeline {
             script.stage('tests') {
                 if (status) {
                     script.dir(projectDir + testsFolder) {
-                        script.parallel {
+//                        script.parallel {
                             script.stage('performanceTest') {
                                 script.steps {
                                     def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
@@ -116,7 +116,7 @@ class Pipeline {
                                     }
                                 }
                             }
-                        }
+//                        }
                     }
                 }
             }
