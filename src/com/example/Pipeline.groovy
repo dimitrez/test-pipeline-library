@@ -99,7 +99,7 @@ class Pipeline {
                                     script.currentBuild.result = 'FAILURE'
                                     script.error('stop')
                                     //failedStepName = 'regressionTest'
-                                    failedStepName = script.env.STAGE_NAME
+                                    def fs = script.env.STAGE_NAME
                                 }
                             }
                         }, runIntegrationTest: {
@@ -119,7 +119,7 @@ class Pipeline {
         catch (e){
             script.node('master') {
                 script.stage('notifications') {
-                    script.sh(script: "echo  ${failedStepName}")
+                    script.sh(script: "echo  " script.env.STAGE_NAME)
                     script.emailext body: failedStepName,
                             subject: 'Failed of Pipeline',
                             to: email
