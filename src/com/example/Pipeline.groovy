@@ -43,11 +43,8 @@ class Pipeline {
         String deploy = config['deploy']['deployCommand'].toString()
 
         def testData = config['test']
-        def size = testData.collect().size()
+        def testSize = testData.collect().size()
 
-        script.node('master'){
-            script.sh(script: "echo " + size)
-        }
 
         def testsFolder = testData['testFolder'].getAt(0)
 
@@ -82,20 +79,21 @@ class Pipeline {
                         }
                     }
                 }
+
                 script.stage('tests') {
                     script.dir(projectDir + testsFolder) {
                         script.parallel runPerformanceTest: {
-                            script.stage('performanceTest') {
+                            script.step('performanceTest') {
                                 if ( script.sh(script: performanceTestCommand)) {
                                 }
                             }
                         }, runRegressionTest: {
-                            script.stage('regressionTest') {
+                            script.step('regressionTest') {
                                 if (script.sh(script: regressionTestCommand)){
                                 }
                             }
                         }, runIntegrationTest: {
-                            script.stage('integrationTest') {
+                            script.step('integrationTest') {
                                 if ( script.sh(script: integrationTestCommand) ) {
                                 }
                             }
