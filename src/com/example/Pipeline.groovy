@@ -43,6 +43,9 @@ class Pipeline {
         String deploy = config['deploy']['deployCommand'].toString()
 
         def testData = config['test']
+
+
+
         def testsFolder = testData['testFolder'].getAt(0)
         def performanceTestCommand = testData.getAt(0)['testCommand'].toString()
         def regressionTestCommand = testData.getAt(1)['testCommand'].toString()
@@ -100,12 +103,15 @@ class Pipeline {
                             }
                         }, runRegressionTest: {
                             script.stage('regressionTest') {
-                                def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
-                                if (regressionTestStatus != 0) {
-                                    failedStepName = script.env.STAGE_NAME
+                                if(script.sh(script: regressionTestCommand, returnStatus: true)){
                                     script.currentBuild.result = 'FAILURE'
-                                    script.error('stop')
                                 }
+//                                def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
+//                                if (regressionTestStatus != 0) {
+//                                    failedStepName = script.env.STAGE_NAME
+//                                    script.currentBuild.result = 'FAILURE'
+//                                    script.error('stop')
+//                                }
                             }
                         }, runIntegrationTest: {
                             script.stage('integrationTest') {
