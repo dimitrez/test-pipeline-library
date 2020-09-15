@@ -103,7 +103,7 @@ class Pipeline {
                             }
                         }, runRegressionTest: {
                             script.stage('regressionTest') {
-                                if(script.sh(script: regressionTestCommand, returnStatus: true)){
+                                if(script.sh(script: regressionTestCommand)){
                                     script.currentBuild.result = 'FAILURE'
                                 }
 //                                def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
