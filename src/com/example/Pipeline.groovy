@@ -22,12 +22,8 @@ class Pipeline {
         }
 
 //    ===================== Parse configuration file ==================
-        //def config = new Yaml().load(new FileReader("/var/jenkins_home/workspace/test/config.yml").text)
-        def workspace
-        script.node('master'){
-            workspace = script.WORKSPACE
-        }
-        def config = new Yaml().load(new FileReader(workspace + "/" + configurationFile).text)
+
+        def config = new Yaml().load(new FileReader(script.WORKSPACE + "/" + configurationFile).text)
 
         def email = config['notifications']['email']['recipients']
 //        def emailOnStart = config['notifications']['email']['on_start']
@@ -94,32 +90,17 @@ class Pipeline {
                     script.dir(projectDir + testsFolder) {
                         script.parallel runPerformanceTest: {
                             script.stage('performanceTest') {
-                                def performanceTestStatus = script.sh(script: performanceTestCommand, returnStatus: true)
-                                if (performanceTestStatus != 0) {
-                                    failedStepName = script.env.STAGE_NAME
-                                    script.currentBuild.result = 'FAILURE'
-                                    script.error('stop')
+                                if ( script.sh(script: performanceTestCommand)) {
                                 }
                             }
                         }, runRegressionTest: {
                             script.stage('regressionTest') {
-                                if(script.sh(script: regressionTestCommand)){
-                                    script.currentBuild.result = 'FAILURE'
+                                if (script.sh(script: regressionTestCommand)){
                                 }
-//                                def regressionTestStatus = script.sh(script: regressionTestCommand, returnStatus: true)
-//                                if (regressionTestStatus != 0) {
-//                                    failedStepName = script.env.STAGE_NAME
-//                                    script.currentBuild.result = 'FAILURE'
-//                                    script.error('stop')
-//                                }
                             }
                         }, runIntegrationTest: {
                             script.stage('integrationTest') {
-                                def integrationTestStatus = script.sh(script: integrationTestCommand, returnStatus: true)
-                                if (integrationTestStatus != 0) {
-                                    failedStepName = script.env.STAGE_NAME
-                                    script.currentBuild.result = 'FAILURE'
-                                    script.error('stop')
+                                if ( script.sh(script: integrationTestCommand) ) {
                                 }
                             }
                         }
@@ -130,7 +111,7 @@ class Pipeline {
         catch (e){
             script.node('master') {
                 script.stage('notifications') {
-                    script.emailext body: failedStepName,
+                    script.emailext body: script.env.STAGE_NAME,
                             subject: 'Failed of Pipeline',
                             to: email
                     script.currentBuild.result = 'FAILURE'
