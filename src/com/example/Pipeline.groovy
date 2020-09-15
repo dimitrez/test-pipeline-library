@@ -62,31 +62,19 @@ class Pipeline {
 
                 script.stage('build') {
                     script.dir(projectDir + buildProjectFolder) {
-                        def buildStatus = script.sh(script: buildCommand, returnStatus: true)
-                        if (buildStatus != 0) {
-                            failedStepName = script.env.STAGE_NAME
-                            script.currentBuild.result = 'FAILURE'
-                            script.error('stop')
+                        if (script.sh(script: buildCommand)) {
                         }
                     }
                 }
                 script.stage('database') {
                     script.dir(projectDir + databaseFolder) {
-                        def databaseStatus = script.sh(script: databaseCommand, returnStatus: true)
-                        if (databaseStatus != 0) {
-                            failedStepName = script.env.STAGE_NAME
-                            script.currentBuild.result = 'FAILURE'
-                            script.error('stop')
+                        if (script.sh(script: databaseCommand)) {
                         }
                     }
                 }
                 script.stage('deploy') {
                     script.dir(projectDir + buildProjectFolder) {
-                        def deployStatus = script.sh(script: deploy, returnStatus: true)
-                        if (deployStatus != 0) {
-                            failedStepName = script.env.STAGE_NAME
-                            script.currentBuild.result = 'FAILURE'
-                            script.error('stop')
+                        if (script.sh(script: deploy)) {
                         }
                     }
                 }
@@ -122,13 +110,6 @@ class Pipeline {
                 }
             }
         }
-//        script.node('master'){
-//            script.stage('cleanup WorkSpace'){
-//                script.dir(workspace){
-//                    script.deleteDir()
-//                }
-//            }
-//        }
 //    ===================== End pipeline ==============================
     }
 }
