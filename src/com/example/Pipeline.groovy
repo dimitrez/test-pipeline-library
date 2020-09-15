@@ -43,14 +43,14 @@ class Pipeline {
         String deploy = config['deploy']['deployCommand'].toString()
 
         def testData = config['test']
-        testData.each {
-            script.node('master'){
-                script.sh (script: "echo " + it)
-            }
+        def size = testData.collect().size()
+
+        script.node('master'){
+            script.sh(script: "echo " + size)
         }
 
-
         def testsFolder = testData['testFolder'].getAt(0)
+
         def performanceTestCommand = testData.getAt(0)['testCommand'].toString()
         def regressionTestCommand = testData.getAt(1)['testCommand'].toString()
         def integrationTestCommand = testData.getAt(2)['testCommand'].toString()
