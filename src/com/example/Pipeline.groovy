@@ -133,6 +133,7 @@ class Pipeline {
                     script.emailext body: failedStepName,
                             subject: 'Failed of Pipeline',
                             to: email
+                    script.currentBuild.result = 'FAILURE'
                 }
             }
         }
