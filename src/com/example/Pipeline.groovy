@@ -44,7 +44,7 @@ class Pipeline {
 
         def testData = config['test']
         testData.each {
-            script.sh (script: "echo " + ${it})
+            script.sh (script: "echo " + it)
         }
 
 
