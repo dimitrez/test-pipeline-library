@@ -22,8 +22,12 @@ class Pipeline {
         }
 
 //    ===================== Parse configuration file ==================
-
-        def config = new Yaml().load(new FileReader(script.WORKSPACE + "/" + configurationFile).text)
+        //def config = new Yaml().load(new FileReader("/var/jenkins_home/workspace/test/config.yml").text)
+        def workspace
+        script.node('master'){
+            workspace = script.WORKSPACE
+        }
+        def config = new Yaml().load(new FileReader(workspace + "/" + configurationFile).text)
 
         def email = config['notifications']['email']['recipients']
 //        def emailOnStart = config['notifications']['email']['on_start']
